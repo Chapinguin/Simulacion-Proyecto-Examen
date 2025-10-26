@@ -5,27 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultado del {{ tipo_examen }}</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f0f2f5; color: #333; }
-        .container { max-width: 800px; margin: 20px auto; background-color: white; padding: 30px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
-        .resultado-header { text-align: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            background-color: #1a202c;
+            background-image: url('https://images.unsplash.com/photo-1737917818705-c69c1df72db4?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE4fHx8ZW58MHx8fHx8'); /* <-- CAMBIA ESTA URL POR TU IMAGEN */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #f4f4f4;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .resultado-header { text-align: center; margin-bottom: 30px; padding-bottom: 25px; border-bottom: 1px solid #ddd; }
         .aprobado { color: #28a745; font-size: 2.8em; font-weight: bold; }
         .reprobado { color: #dc3545; font-size: 2.8em; font-weight: bold; }
-        .puntaje-summary { margin-top: 15px; }
-        .puntaje-summary table { width: 80%; margin: 20px auto; border-collapse: collapse; }
-        .puntaje-summary td { padding: 10px; border: 1px solid #ddd; }
+        .puntaje-summary { margin-top: 20px; }
+        .puntaje-summary table { width: 100%; max-width: 500px; margin: 20px auto; border-collapse: collapse; background-color: white; border-radius: 8px; overflow: hidden; }
+        .puntaje-summary td { padding: 12px 15px; border: 1px solid #ddd; }
         .puntaje-summary .label { font-weight: bold; text-align: right; width: 60%; }
         .puntaje-summary .value { text-align: left; }
-        .revision-pregunta { margin-top: 25px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
-        .pregunta-texto { font-weight: bold; font-size: 1.1em;}
+        .revision-pregunta { margin-top: 25px; border-bottom: 1px solid #ddd; padding-bottom: 20px; }
+        .revision-pregunta:last-child { border-bottom: none; }
+        .pregunta-texto { font-weight: bold; font-size: 1.2em; color: #333;}
         .opcion { margin-left: 20px; }
         .respuesta-correcta { color: #28a745; font-weight: bold; }
         .respuesta-incorrecta { color: #dc3545; font-weight: bold; }
-        .explicacion { background-color: #eef7ff; border-left: 4px solid #007bff; padding: 10px; margin-top: 10px; font-style: italic; }
-        .btn-inicio { display: block; width: 200px; margin: 40px auto; text-align: center; padding: 15px; font-size: 18px; background-color: #007bff; color: white; border-radius: 5px; text-decoration: none; transition: background-color 0.2s; }
+        .explicacion { background-color: #e2eefe; border-left: 4px solid #007bff; padding: 15px; margin-top: 15px; border-radius: 0 8px 8px 0; }
+        .btn-inicio {
+            display: block;
+            width: 200px;
+            margin: 40px auto 0;
+            text-align: center;
+            padding: 15px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.2s, transform 0.1s;
+        }
         .btn-inicio:hover { background-color: #0056b3; }
+        .btn-inicio:active { transform: scale(0.98); }
     </style>
 </head>
-<!-- EN templates/resultado.html -->
 <body>
     <div class="container">
         <div class="resultado-header">
@@ -34,7 +65,7 @@
             {% else %}
                 <h1 class="reprobado">❌ REPROBADO ❌</h1>
             {% endif %}
-            
+
             <div class="puntaje-summary">
                 <h3>Resumen de Calificación ({{ tipo_examen }})</h3>
                 <table>
@@ -52,7 +83,7 @@
             <div class="revision-pregunta">
                 <p class="pregunta-texto">{{ loop.index }}. {{ res.pregunta }}</p>
                 <div class="opciones">
-                    <p>Tu respuesta: 
+                    <p>Tu respuesta:
                         {% if res.es_correcta %}
                             <span class="respuesta-correcta">✔ {{ res.respuesta_enviada_texto }} (Correcta) (+{{ puntos_reactivo }} puntos)</span>
                         {% else %}

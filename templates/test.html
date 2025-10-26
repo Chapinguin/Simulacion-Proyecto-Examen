@@ -5,58 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulador de Examen - Modo {{ tipo_examen }}</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f0f2f5; color: #333; }
-        .container { max-width: 800px; margin: 20px auto; background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #0056b3; }
-        .pregunta-bloque { display: none; /* Ocultamos todas las preguntas por defecto */ }
-        .pregunta-activa { display: block; /* Mostramos solo la pregunta activa */ }
-        .pregunta-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .pregunta-texto { font-size: 1.2em; font-weight: bold; flex-grow: 1; }
-        .valor-puntos { font-size: 0.9em; font-weight: bold; color: #007bff; background-color: #eef7ff; padding: 5px 10px; border-radius: 15px; white-space: nowrap; }
-        .pregunta-imagen { max-width: 300px; display: block; margin: 15px auto; border-radius: 5px; }
-        .opciones label { display: block; background-color: #f8f9fa; padding: 15px; margin-bottom: 10px; border-radius: 5px; cursor: pointer; border: 1px solid #ddd; transition: background-color 0.2s; }
-        .opciones label:hover { background-color: #e2e6ea; }
-        .opciones input { margin-right: 10px; }
-        .navegacion { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
-        .progreso { font-weight: bold; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            background-color: #1a202c;
+            background-image: url('https://images.unsplash.com/photo-1737917818705-c69c1df72db4?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE4fHx8ZW58MHx8fHx8'); /* <-- CAMBIA ESTA URL POR TU IMAGEN */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: #f4f4f4;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        h1 { text-align: center; color: #0056b3; margin-top: 0; }
+        .pregunta-bloque { display: none; }
+        .pregunta-activa { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .pregunta-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; gap: 15px; }
+        .pregunta-texto { font-size: 1.3em; font-weight: bold; flex-grow: 1; color: #333; }
+        .valor-puntos { font-size: 0.9em; font-weight: bold; color: #007bff; background-color: #e2eefe; padding: 6px 12px; border-radius: 20px; white-space: nowrap; }
+        .pregunta-imagen { max-width: 100%; height: auto; max-height: 250px; display: block; margin: 20px auto; border-radius: 8px; }
+        .opciones label {
+            display: block;
+            background-color: white;
+            padding: 18px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            transition: background-color 0.2s, border-color 0.2s, transform 0.1s;
+        }
+        .opciones label:hover { background-color: #e9ecef; border-color: #007bff; }
+        .opciones label:active { transform: scale(0.99); }
+        .opciones input { margin-right: 12px; }
+        .navegacion { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; border-top: 1px solid #ccc; padding-top: 20px; }
+        .progreso { font-weight: bold; font-size: 1.1em; color: #555;}
         .timer { font-size: 1.5em; font-weight: bold; color: #dc3545; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🚗 Modo {{ tipo_examen }} 🏁</h1>
-        
+
         <form id="examen-form" action="/resultado" method="POST">
             <input type="hidden" name="tipo_examen" value="{{ tipo_examen }}">
             
-            <!-- Iteramos sobre las preguntas para generarlas en el HTML, pero ocultas -->
-{% for pregunta in preguntas %}
-<div class="pregunta-bloque" id="bloque-{{ loop.index0 }}">
-    <div class="pregunta-header">
-        <!-- Accedemos a los atributos del objeto con '.' -->
-        <p class="pregunta-texto">{{ loop.index }}. {{ pregunta.texto_pregunta }}</p>
-        <span class="valor-puntos">Valor: {{ puntos_por_pregunta }} puntos</span>
-    </div>
-    
-    {% if pregunta.imagen_path %}
-        <img src="{{ url_for('static', filename=pregunta.imagen_path) }}" alt="Imagen de la pregunta" class="pregunta-imagen">
-    {% endif %}
-    
-    <div class="opciones">
-        <!-- Iteramos sobre la relación 'opciones' del objeto pregunta -->
-        {% for opcion in pregunta.opciones %}
-        <label>
-            <!-- El valor ahora es el ID de la opción, que es único -->
-            <input type="radio" name="pregunta-{{ pregunta.id }}" value="{{ opcion.id }}" required>
-            {{ opcion.texto_opcion }}
-        </label>
-        {% endfor %}
-    </div>
-</div>
-{% endfor %}
+            {% for pregunta in preguntas %}
+            <div class="pregunta-bloque" id="bloque-{{ loop.index0 }}">
+                <div class="pregunta-header">
+                    <p class="pregunta-texto">{{ loop.index }}. {{ pregunta.texto_pregunta }}</p>
+                    <span class="valor-puntos">Valor: {{ puntos_por_pregunta }} puntos</span>
+                </div>
+
+                {% if pregunta.imagen_path %}
+                    <img src="{{ url_for('static', filename=pregunta.imagen_path) }}" alt="Imagen de la pregunta" class="pregunta-imagen">
+                {% endif %}
+
+                <div class="opciones">
+                    {% for opcion in pregunta.opciones %}
+                    <label>
+                        <input type="radio" name="pregunta-{{ pregunta.id }}" value="{{ opcion.id }}" required>
+                        {{ opcion.texto_opcion }}
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
         </form>
 
-        <!-- Controles de navegación y temporizador -->
         <div class="navegacion">
             <span class="progreso" id="progreso-texto"></span>
             <span class="timer" id="timer-texto">Tiempo: 60</span>
@@ -64,8 +91,6 @@
     </div>
 
     <script>
-        // --- LÓGICA DEL TEMPORIZADOR POR PREGUNTA ---
-
         const preguntas = document.querySelectorAll('.pregunta-bloque');
         const progresoTexto = document.getElementById('progreso-texto');
         const timerTexto = document.getElementById('timer-texto');
@@ -76,29 +101,22 @@
         let intervalo;
 
         function mostrarSiguientePregunta() {
-            // Detener el temporizador anterior
             clearInterval(intervalo);
             
-            // Ocultar la pregunta actual
             if (preguntas[preguntaActualIndex]) {
                 preguntas[preguntaActualIndex].classList.remove('pregunta-activa');
             }
 
             preguntaActualIndex++;
 
-            // Si hemos pasado todas las preguntas, enviar el formulario
             if (preguntaActualIndex >= preguntas.length) {
                 finalizarExamen();
                 return;
             }
 
-            // Mostrar la nueva pregunta
             preguntas[preguntaActualIndex].classList.add('pregunta-activa');
-            
-            // Actualizar el progreso
             progresoTexto.textContent = `Pregunta ${preguntaActualIndex + 1} de ${preguntas.length}`;
             
-            // Reiniciar e iniciar el nuevo temporizador
             tiempoRestante = 60;
             actualizarTimer();
             intervalo = setInterval(actualizarTimer, 1000);
@@ -107,7 +125,7 @@
         function actualizarTimer() {
             timerTexto.textContent = `Tiempo: ${tiempoRestante}`;
             if (tiempoRestante <= 0) {
-                mostrarSiguientePregunta(); // El tiempo se acabó, pasar a la siguiente
+                mostrarSiguientePregunta();
             }
             tiempoRestante--;
         }
@@ -117,23 +135,20 @@
             form.submit();
         }
 
-        // --- INICIO DEL EXAMEN ---
-        
-        // Mostrar la primera pregunta
-        preguntas[0].classList.add('pregunta-activa');
-        progresoTexto.textContent = `Pregunta 1 de ${preguntas.length}`;
-
-        // Añadir un 'listener' a cada opción de respuesta
-        document.querySelectorAll('.opciones input[type="radio"]').forEach(radio => {
-            radio.addEventListener('change', () => {
-                // Cuando el usuario selecciona una respuesta, esperamos un poco y pasamos a la siguiente
-                setTimeout(mostrarSiguientePregunta, 300); // 300ms de espera
-            });
+        document.addEventListener('DOMContentLoaded', () => {
+            if(preguntas.length > 0) {
+                preguntas[0].classList.add('pregunta-activa');
+                progresoTexto.textContent = `Pregunta 1 de ${preguntas.length}`;
+                
+                document.querySelectorAll('.opciones input[type="radio"]').forEach(radio => {
+                    radio.addEventListener('change', () => {
+                        setTimeout(mostrarSiguientePregunta, 300);
+                    });
+                });
+                
+                intervalo = setInterval(actualizarTimer, 1000);
+            }
         });
-        
-        // Iniciar el primer temporizador
-        intervalo = setInterval(actualizarTimer, 1000);
-
     </script>
 </body>
 </html>

@@ -5,28 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Usuario</title>
     <style>
-        /* Usamos exactamente el mismo estilo que la página de login para consistencia */
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #f0f2f5; margin: 0; padding: 20px; box-sizing: border-box;}
-        .login-container { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        /* Estilo unificado con la página de login */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            background-color: #1a202c;
+            background-image: url('https://images.unsplash.com/photo-1737917818705-c69c1df72db4?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE4fHx8ZW58MHx8fHx8'); /* <-- CAMBIA ESTA URL POR TU IMAGEN */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .signup-container {
+            background: #f4f4f4; /* Fondo gris claro */
+            padding: 40px 50px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 420px;
+        }
         h2 { text-align: center; margin-bottom: 25px; color: #333; }
         .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; color: #555;}
-        .form-group input { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
-        .btn { width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; transition: background-color 0.2s; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #555;}
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #28a745;
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.2s, transform 0.1s;
+        }
         .btn:hover { background-color: #218838; }
-        .alert-danger { padding: 12px; background-color: #f8d7da; color: #721c24; border-radius: 5px; margin-bottom: 15px; border: 1px solid #f5c6cb;}
-        .alert-success { padding: 12px; background-color: #d4edda; color: #155724; border-radius: 5px; margin-bottom: 15px; border: 1px solid #c3e6cb;}
-        .alert-warning { padding: 12px; background-color: #fff3cd; color: #856404; border-radius: 5px; margin-bottom: 15px; border: 1px solid #ffeeba;}
+        .btn:active { transform: scale(0.98); }
+        .alert-danger { padding: 12px; background-color: #f8d7da; color: #721c24; border-radius: 8px; margin-bottom: 20px; border: 1px solid #f5c6cb;}
+        .alert-success { padding: 12px; background-color: #d4edda; color: #155724; border-radius: 8px; margin-bottom: 20px; border: 1px solid #c3e6cb;}
+        .alert-warning { padding: 12px; background-color: #fff3cd; color: #856404; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ffeeba;}
         .login-link { text-align: center; margin-top: 20px; font-size: 0.9em; }
         .login-link a { color: #007bff; text-decoration: none; }
         .login-link a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
-    <div class="login-container">
+    <div class="signup-container">
         <h2>Crear Nueva Cuenta</h2>
-        
-        <!-- Bloque para mostrar mensajes de error o éxito (flash messages) -->
+
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
@@ -58,7 +101,7 @@
             </div>
             <button type="submit" class="btn">Registrarse</button>
         </form>
-        
+
         <p class="login-link">¿Ya tienes una cuenta? <a href="{{ url_for('login') }}">Inicia sesión aquí</a></p>
     </div>
 </body>

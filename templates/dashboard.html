@@ -4,24 +4,62 @@
     <meta charset="UTF-8">
     <title>Dashboard de Rendimiento</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f0f2f5; color: #333; }
-        .container { max-width: 900px; margin: 20px auto; }
-        .dashboard-card { background-color: white; padding: 30px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); margin-bottom: 30px; }
-        h1, h2 { text-align: center; color: #0056b3; }
-        .grafico-container { text-align: center; margin-top: 20px; }
-        .grafico-container img { max-width: 100%; border: 1px solid #ddd; border-radius: 5px; }
-        .interpretacion { margin-top: 20px; background-color: #eef7ff; border-left: 4px solid #007bff; padding: 15px; }
-        .no-data { text-align: center; color: #6c757d; font-style: italic; padding: 40px; }
-        .btn-inicio { display: block; width: 200px; margin: 30px auto; text-align: center; padding: 15px; font-size: 18px; background-color: #007bff; color: white; border-radius: 5px; text-decoration: none; transition: background-color 0.2s; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            background-color: #1a202c;
+            background-image: url('https://images.unsplash.com/photo-1737917818705-c69c1df72db4?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE4fHx8ZW58MHx8fHx8'); /* <-- CAMBIA ESTA URL POR TU IMAGEN */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #f4f4f4;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        h1, h2 { text-align: center; color: #0056b3; margin-top: 0;}
+        h2 { margin-top: 20px; padding-bottom: 10px; border-bottom: 1px solid #ccc;}
+        .dashboard-section { margin-bottom: 40px; }
+        .grafico-container {
+            text-align: center;
+            margin-top: 25px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .grafico-container img { max-width: 100%; border-radius: 5px; }
+        .interpretacion { margin-top: 20px; background-color: #e2eefe; border-left: 4px solid #007bff; padding: 15px; border-radius: 0 8px 8px 0; }
+        .no-data { text-align: center; color: #6c757d; font-style: italic; padding: 40px; background-color: #fff; border-radius: 8px; border: 1px dashed #ccc;}
+        .btn-inicio {
+            display: block;
+            width: 200px;
+            margin: 30px auto 0;
+            text-align: center;
+            padding: 15px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background-color 0.2s, transform 0.1s;
+            font-weight: bold;
+        }
         .btn-inicio:hover { background-color: #0056b3; }
+        .btn-inicio:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>📊 Dashboard de Rendimiento</h1>
 
-        <!-- SECCIÓN PARA EL ANÁLISIS DE PRÁCTICAS -->
-        <div class="dashboard-card">
+        <div class="dashboard-section">
             <h2>Análisis de Exámenes de Práctica</h2>
             {% if grafico_practica_url %}
                 <div class="grafico-container">
@@ -29,20 +67,15 @@
                 </div>
                 <div class="interpretacion">
                     <h3>Interpretación del Indicador:</h3>
-                    <p>
-                        Este gráfico de líneas muestra el **puntaje promedio** obtenido por todos los usuarios en cada uno de sus intentos de práctica.
-                    </p>
-                    <p>
-                        Idealmente, deberíamos observar una **tendencia ascendente**, lo que indicaría que los usuarios están aprendiendo y mejorando su puntaje con cada práctica realizada. Una línea plana o descendente podría sugerir que las preguntas son demasiado difíciles o que los usuarios no están aprendiendo de sus errores.
-                    </p>
+                    <p>Este gráfico de líneas muestra el <strong>puntaje promedio</strong> obtenido por todos los usuarios en cada uno de sus intentos de práctica.</p>
+                    <p>Idealmente, deberíamos observar una <strong>tendencia ascendente</strong>, lo que indicaría que los usuarios están aprendiendo y mejorando su puntaje con cada práctica realizada.</p>
                 </div>
             {% else %}
                 <p class="no-data">No hay suficientes datos de exámenes de práctica para generar este análisis. ¡Realiza al menos un intento!</p>
             {% endif %}
         </div>
 
-        <!-- SECCIÓN PARA EL ANÁLISIS DEL EXAMEN FINAL -->
-        <div class="dashboard-card">
+        <div class="dashboard-section">
             <h2>Análisis de Exámenes Finales</h2>
             {% if grafico_final_url %}
                 <div class="grafico-container">
@@ -50,12 +83,8 @@
                 </div>
                 <div class="interpretacion">
                     <h3>Interpretación del Indicador:</h3>
-                    <p>
-                        Este gráfico de barras muestra la **correlación entre el número de prácticas realizadas y la probabilidad de aprobar el examen final** en el primer intento.
-                    </p>
-                    <p>
-                        Una tendencia ascendente clara demuestra el **valor directo de la simulación de estudio**: los usuarios que más practican están considerablemente mejor preparados y tienen una mayor probabilidad de éxito en la evaluación final.
-                    </p>
+                    <p>Este gráfico de barras muestra la <strong>correlación entre el número de prácticas realizadas y la probabilidad de aprobar el examen final</strong> en el primer intento.</p>
+                    <p>Una tendencia ascendente clara demuestra el <strong>valor directo de la simulación de estudio</strong>: quienes más practican están mejor preparados y tienen mayor probabilidad de éxito.</p>
                 </div>
             {% else %}
                 <p class="no-data">No hay suficientes datos de exámenes finales para generar este análisis. ¡Realiza al menos un examen final!</p>
