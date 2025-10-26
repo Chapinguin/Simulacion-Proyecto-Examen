@@ -1,0 +1,962 @@
+[
+  {
+    "id": 1,
+    "pregunta": "Observando la imagen, ¿qué significa esta señal de tráfico regulatoria de color rojo y blanco?",
+    "opciones": {
+      "a": "Curva pronunciada adelante",
+      "b": "No se permite dar vuelta en U",
+      "c": "Camino sinuoso"
+    },
+    "respuesta_correcta": "b",
+    "imagen": "no_u_turn_sign.png",
+    "explicacion": "Esta señal prohíbe explícitamente realizar una vuelta en U. Se encuentra en la página 42 del manual."
+  },
+  {
+    "id": 2,
+    "pregunta": "¿Cuál es el límite de velocidad en una zona escolar cuando los niños están presentes, a menos que se indique lo contrario?",
+    "opciones": {
+      "a": "15 mph",
+      "b": "25 mph",
+      "c": "35 mph"
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "El límite de velocidad es de 25 mph dentro de los 500 pies de una escuela mientras los niños están afuera o cruzando la calle. Se menciona en la página 56 del manual."
+  },
+  {
+    "id": 3,
+    "pregunta": "Al aproximarse a una rotonda (roundabout), usted debe:",
+    "opciones": {
+      "a": "Ceder el paso a todo el tráfico que ya está dentro de la rotonda.",
+      "b": "Entrar inmediatamente, ya que los vehículos que entran tienen el derecho de paso.",
+      "c": "Detenerse siempre completamente antes de entrar, incluso si no hay tráfico."
+    },
+    "respuesta_correcta": "a",
+    "imagen": "roundabout_example.png",
+    "explicacion": "La regla principal en una rotonda es reducir la velocidad y ceder el paso a los vehículos y ciclistas que ya están circulando dentro de ella. Se explica en la página 46 del manual."
+  },
+  {
+    "id": 4,
+    "pregunta": "Una línea amarilla continua junto a una línea amarilla discontinua significa:",
+    "opciones": {
+      "a": "No se permite rebasar desde ningún lado.",
+      "b": "Se permite rebasar a los vehículos del lado de la línea discontinua.",
+      "c": "La carretera termina más adelante."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Una línea amarilla discontinua indica que puede rebasar si la línea discontinua está de su lado de la carretera. Esto se encuentra en la página 19 del manual."
+  },
+  {
+    "id": 5,
+    "pregunta": "¿Cuál es el límite legal de Concentración de Alcohol en la Sangre (BAC) para un conductor mayor de 21 años?",
+    "opciones": {
+      "a": "0.05%",
+      "b": "0.08%",
+      "c": "0.10%"
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Es ilegal conducir con un BAC de 0.08% o más si tiene 21 años o más. Esto se especifica en la página 79 del manual."
+  },
+  {
+    "id": 6,
+    "pregunta": "Cuando se estaciona cuesta arriba en una calle con acera (bordillo), debe girar las ruedas delanteras:",
+    "opciones": {
+      "a": "Hacia la acera.",
+      "b": "Rectas.",
+      "c": "Hacia el lado contrario de la acera."
+    },
+    "respuesta_correcta": "c",
+    "imagen": "parking_uphill_curb.png",
+    "explicacion": "Al estacionar cuesta arriba, gire las ruedas delanteras hacia el lado contrario de la acera y deje que el vehículo ruede hacia atrás unas pulgadas hasta que la rueda toque suavemente la acera. Esto se detalla en la página 33 del manual."
+  },
+  {
+    "id": 7,
+    "pregunta": "Se aproxima a una intersección. La luz del semáforo es roja intermitente. ¿Qué debe hacer?",
+    "opciones": {
+      "a": "Reducir la velocidad y proceder si la vía está libre.",
+      "b": "Detenerse por completo y luego proceder cuando sea seguro.",
+      "c": "Esperar a que la luz se vuelva verde."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Una luz roja intermitente significa DETENERSE. Después de detenerse, puede continuar cuando sea seguro. Se trata como una señal de alto (STOP). Esto se explica en la página 39 del manual."
+  },
+  {
+    "id": 8,
+    "pregunta": "Es ilegal dejar a un niño de seis años o menos desatendido en un vehículo a menos que:",
+    "opciones": {
+      "a": "Las llaves estén en el encendido.",
+      "b": "El niño esté supervisado por una persona de al menos 12 años.",
+      "c": "Las ventanas estén ligeramente abiertas."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "La ley establece que un niño puede ser dejado bajo la supervisión de una persona que tenga al menos 12 años de edad. Esto se menciona en la página 73 del manual."
+  },
+  {
+    "id": 9,
+    "pregunta": "Debe notificar al DMV en un plazo de 10 días si usted:",
+    "opciones": {
+      "a": "Pinta su vehículo de un color diferente.",
+      "b": "Se muda de dirección.",
+      "c": "Recibe una multa de estacionamiento."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Si se muda, debe notificar al DMV de su nueva dirección en un plazo de diez días. Esto se especifica en la página 14 del manual."
+  },
+  {
+    "id": 10,
+    "pregunta": "¿Cuándo puede cruzar legalmente sobre dos líneas amarillas continuas?",
+    "opciones": {
+      "a": "Para rebasar a un vehículo que va lento.",
+      "b": "Para entrar o salir de una entrada de autos (driveway).",
+      "c": "Si la carretera está despejada en ambas direcciones."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "No debe cruzar líneas amarillas dobles y continuas, excepto para girar a la izquierda para entrar o salir de una entrada de vehículos o una carretera privada, o para hacer una vuelta en U. Esto se explica en la página 19 del manual."
+  },
+  {
+    "id": 11,
+    "pregunta": "Al conducir de noche, debe atenuar sus luces altas cuando un vehículo que se aproxima está a:",
+    "opciones": {
+      "a": "300 pies",
+      "b": "500 pies",
+      "c": "1000 pies"
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Debe atenuar sus luces altas a bajas a menos de 500 pies de un vehículo que viene hacia usted. La información se encuentra en la página 17 del manual."
+  },
+  {
+    "id": 12,
+    "pregunta": "La 'Regla de los Tres Segundos' se refiere a:",
+    "opciones": {
+      "a": "El tiempo que debe esperar en una señal de alto.",
+      "b": "El espacio que debe dejar entre usted y el vehículo de adelante.",
+      "c": "Cuánto tiempo puede usar su señal de giro antes de girar."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Para evitar seguir demasiado de cerca (tailgating), use la regla de los tres segundos para asegurar una distancia de seguimiento segura. Esto se explica en la página 63 del manual."
+  },
+  {
+    "id": 13,
+    "pregunta": "Si ve esta señal (un pentágono de 5 lados), significa que:",
+    "opciones": {
+      "a": "Se está acercando a un cruce de ferrocarril.",
+      "b": "Está cerca de una escuela y debe conducir despacio.",
+      "c": "Hay una señal de alto más adelante."
+    },
+    "respuesta_correcta": "b",
+    "imagen": "school_zone_sign.png",
+    "explicacion": "Una señal de 5 lados con esta forma indica que está cerca de una escuela. Conduzca despacio y deténgase por los niños en el cruce de peatones. Esto se describe en la página 44 del manual."
+  },
+  {
+    "id": 14,
+    "pregunta": "Si un vehículo de emergencia con luces intermitentes se acerca por detrás, usted debe:",
+    "opciones": {
+      "a": "Acelerar para quitarse del camino.",
+      "b": "Continuar a la misma velocidad.",
+      "c": "Hacerse a la derecha y detenerse."
+    },
+    "respuesta_correcta": "c",
+    "imagen": null,
+    "explicacion": "Debe ceder el paso a cualquier vehículo de emergencia. Conduzca hacia el borde derecho de la carretera y deténgase hasta que el vehículo de emergencia haya pasado. Esto se especifica en la página 51 del manual."
+  },
+  {
+    "id": 15,
+    "pregunta": "¿Qué es lo primero que debe hacer si sus ruedas se salen del pavimento?",
+    "opciones": {
+      "a": "Frenar bruscamente.",
+      "b": "Sujetar firmemente el volante y quitar el pie del acelerador.",
+      "c": "Girar bruscamente el volante para volver a la carretera."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Si sus ruedas se desvían del pavimento, sujete firmemente el volante, quite el pie del acelerador y frene suavemente antes de regresar con cuidado al pavimento. Esto se describe en la página 74 del manual."
+  },
+  {
+    "id": 16,
+    "pregunta": "Un conductor menor de 18 años no puede conducir entre las 11 p.m. y las 5 a.m. durante los primeros:",
+    "opciones": {
+      "a": "6 meses",
+      "b": "12 meses",
+      "c": "18 meses"
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Durante los primeros 12 meses, un conductor con licencia provisional no puede conducir entre las 11 p.m. y las 5 a.m., con algunas excepciones. Esto se menciona en la página 10 del manual."
+  },
+  {
+    "id": 17,
+    "pregunta": "Al hacer un giro a la derecha, debe:",
+    "opciones": {
+      "a": "Girar ampliamente hacia el carril izquierdo antes de completar el giro.",
+      "b": "Mantenerse lo más cerca posible del borde derecho de la carretera.",
+      "c": "Detenerse y esperar a todos los peatones, incluso si tienen una señal de 'No caminar'."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Para hacer un giro a la derecha, conduzca cerca del borde derecho de la carretera y complete su giro en el carril derecho. Esto se explica en la página 24 del manual."
+  },
+  {
+    "id": 18,
+    "pregunta": "Una acera (bordillo) pintada de azul significa:",
+    "opciones": {
+      "a": "Estacionamiento solo para carga y descarga.",
+      "b": "Estacionamiento para una persona discapacitada con una placa o cartel especial.",
+      "c": "No se puede estacionar en ningún momento."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Una acera pintada de azul indica estacionamiento para una persona discapacitada o alguien que conduce a una persona discapacitada con un cartel o placa especial. Esto se detalla en la página 34 del manual."
+  },
+  {
+    "id": 19,
+    "pregunta": "¿Qué es el hidroplaneo (hydroplaning)?",
+    "opciones": {
+      "a": "Cuando sus neumáticos pierden contacto con la carretera y se deslizan sobre el agua.",
+      "b": "Conducir en un vehículo anfibio.",
+      "c": "Una técnica de ahorro de combustible al conducir cuesta abajo."
+    },
+    "respuesta_correcta": "a",
+    "imagen": null,
+    "explicacion": "El hidroplaneo ocurre cuando un vehículo se desliza sobre el agua porque los neumáticos pierden todo contacto con la carretera. Para evitarlo, conduzca despacio en condiciones de lluvia. Esto se explica en la página 68 del manual."
+  },
+  {
+    "id": 20,
+    "pregunta": "No debe rebasar a otro vehículo a menos de ____ de un puente, viaducto o túnel.",
+    "opciones": {
+      "a": "100 pies",
+      "b": "200 pies",
+      "c": "500 pies"
+    },
+    "respuesta_correcta": "a",
+    "imagen": null,
+    "explicacion": "La ley prohíbe rebasar a menos de 100 pies de una intersección, puente, túnel, cruce de ferrocarril u otra área peligrosa. Esto se menciona en la página 30 del manual."
+  },
+  {
+    "id": 21,
+    "pregunta": "Un semáforo con una flecha verde continua significa que:",
+    "opciones": {
+      "a": "Debe ceder el paso al tráfico que se aproxima y luego girar.",
+      "b": "Puede hacer un giro 'protegido' en la dirección de la flecha.",
+      "c": "Debe detenerse y esperar la luz verde."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Una flecha verde significa AVANZAR en la dirección de la flecha. La flecha verde le permite hacer un giro protegido. El tráfico que se aproxima está detenido por una luz roja. Esto se explica en la página 40 del manual."
+  },
+  {
+    "id": 22,
+    "pregunta": "En una intersección sin señales de 'ALTO' o 'CEDA EL PASO', dos vehículos llegan al mismo tiempo. ¿Quién tiene el derecho de paso?",
+    "opciones": {
+      "a": "El vehículo de la izquierda.",
+      "b": "El vehículo de la derecha.",
+      "c": "El vehículo que va más rápido."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "En intersecciones sin señales de 'ALTO' o 'CEDA EL PASO', ceda el paso al vehículo, peatón o ciclista que esté a su derecha. Esto se detalla en la página 45 del manual."
+  },
+  {
+    "id": 23,
+    "pregunta": "Esta señal blanca regulatoria significa:",
+    "opciones": {
+      "a": "El carril derecho termina, incorpórese a la izquierda.",
+      "b": "El tráfico más lento debe usar el carril derecho.",
+      "c": "No gire a la derecha."
+    },
+    "respuesta_correcta": "b",
+    "imagen": "slower_traffic_keep_right_sign.png",
+    "explicacion": "Esta señal indica que los vehículos que se mueven más lentamente deben permanecer en el carril derecho. Se muestra en la página 42 del manual."
+  },
+  {
+    "id": 24,
+    "pregunta": "Para usar un carril de vehículos de alta ocupación (HOV), debe:",
+    "opciones": {
+      "a": "Conducir un vehículo de lujo.",
+      "b": "Tener el número mínimo de personas requerido, o conducir una motocicleta o un vehículo de bajas emisiones aprobado.",
+      "c": "Conducir al menos 10 mph por encima del límite de velocidad."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Un carril HOV está reservado para vehículos compartidos, autobuses, motocicletas o vehículos de bajas emisiones con una calcomanía. Debe cumplir con los requisitos publicados. Esto se explica en las páginas 21-22 del manual."
+  },
+  {
+    "id": 25,
+    "pregunta": "Si está involucrado en una colisión, debe reportarla al DMV si causa más de $1,000 en daños o si:",
+    "opciones": {
+      "a": "Ocurrió de noche.",
+      "b": "Alguien resulta herido o muere.",
+      "c": "La policía no está en la escena."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Debe reportar una colisión al DMV en 10 días si causó más de $1,000 en daños a la propiedad, o si alguien resultó herido (sin importar cuán leve) o murió. Esto se especifica en la página 84 del manual."
+  },
+  {
+    "id": 26,
+    "pregunta": "¿Qué significa una línea blanca continua en el borde de la carretera?",
+    "opciones": {
+      "a": "Marca el borde derecho de la carretera.",
+      "b": "Indica un carril para bicicletas.",
+      "c": "Es una zona de no estacionamiento."
+    },
+    "respuesta_correcta": "a",
+    "imagen": null,
+    "explicacion": "Las líneas blancas continuas marcan los carriles de tráfico que van en la misma dirección, como las calles de un solo sentido, y también marcan el borde derecho de la carretera. Esto se menciona en la página 19 del manual, aunque se infiere de los usos de las líneas blancas."
+  },
+  {
+    "id": 27,
+    "pregunta": "Usted está conduciendo en la autopista y un vehículo quiere incorporarse a su carril desde la rampa de entrada. Usted debe:",
+    "opciones": {
+      "a": "Tocar la bocina para hacerle saber que está allí.",
+      "b": "Acelerar para pasar rápidamente.",
+      "c": "Dejar espacio para el vehículo que se incorpora, si es posible y seguro."
+    },
+    "respuesta_correcta": "c",
+    "imagen": null,
+    "explicacion": "Al conducir, esté atento a los vehículos que entran a la autopista y haga espacio para ellos cuando sea seguro hacerlo. Esto se relaciona con la conducción segura y la cortesía, y se alinea con la información sobre fusión en la página 29."
+  },
+  {
+    "id": 28,
+    "pregunta": "Es seguro rebasar por la derecha cuando:",
+    "opciones": {
+      "a": "El vehículo de adelante va demasiado lento.",
+      "b": "Está en una calle de un solo sentido o en una carretera con dos o más carriles en su dirección.",
+      "c": "Nunca es seguro rebasar por la derecha."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Puede rebasar por la derecha cuando una autopista abierta tiene dos o más carriles en su dirección o cuando el conductor de adelante está girando a la izquierda. Esto se explica en la página 31 del manual."
+  },
+  {
+    "id": 29,
+    "pregunta": "¿Cuál es la distancia mínima que debe señalizar antes de hacer un giro?",
+    "opciones": {
+      "a": "50 pies",
+      "b": "100 pies",
+      "c": "200 pies"
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Debe señalizar al menos 100 pies antes de girar. Esto se menciona en la página 17 del manual."
+  },
+  {
+    "id": 30,
+    "pregunta": "Al retroceder, debe:",
+    "opciones": {
+      "a": "Confiar únicamente en su espejo retrovisor.",
+      "b": "Mirar por encima de su hombro derecho a través de la ventana trasera.",
+      "c": "Retroceder rápidamente para minimizar el tiempo que está en el camino de otros."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Al retroceder, mire por encima del hombro para ver dónde va. No dependa solo de sus espejos. El manual describe esto en el contexto de la dirección con una sola mano en la página 16 y el retroceso en línea recta en la página 33."
+  },
+  {
+    "id": 31,
+    "pregunta": "Un peatón ciego o con discapacidad visual tiene el derecho de paso:",
+    "opciones": {
+      "a": "Solo en los cruces de peatones marcados.",
+      "b": "Solo si un semáforo lo indica.",
+      "c": "En todo momento."
+    },
+    "respuesta_correcta": "c",
+    "imagen": null,
+    "explicacion": "Los peatones que usan perros guía o bastones blancos tienen el derecho de paso en todo momento. Esto se especifica en la página 48 del manual."
+  },
+  {
+    "id": 32,
+    "pregunta": "Esta señal de advertencia amarilla significa:",
+    "opciones": {
+      "a": "La carretera se estrecha más adelante.",
+      "b": "El tráfico se incorpora desde la derecha.",
+      "c": "Hay un camino sinuoso más adelante."
+    },
+    "respuesta_correcta": "b",
+    "imagen": "merging_traffic_sign.png",
+    "explicacion": "Esta señal advierte a los conductores que el tráfico de otra carretera se incorporará al suyo. Esté preparado para que los vehículos entren en su carril. La señal se muestra en la página 43 del manual."
+  },
+  {
+    "id": 33,
+    "pregunta": "Si su vehículo comienza a derrapar sobre hielo, debe:",
+    "opciones": {
+      "a": "Frenar con fuerza.",
+      "b": "Quitar el pie del acelerador y girar en la dirección del derrape.",
+      "c": "Acelerar para recuperar la tracción."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Si comienza a derrapar, quite lentamente el pie del acelerador, no use los frenos y gire el volante en la dirección del derrape. Esto se explica en la página 66 del manual."
+  },
+  {
+    "id": 34,
+    "pregunta": "No debe estacionarse a menos de ____ pies de un hidrante de incendios.",
+    "opciones": {
+      "a": "10 pies",
+      "b": "15 pies",
+      "c": "20 pies"
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Es ilegal estacionarse a menos de 15 pies de un hidrante de incendios o de la entrada de una estación de bomberos. Esto se detalla en la página 34 del manual."
+  },
+  {
+    "id": 35,
+    "pregunta": "Puede girar a la izquierda con un semáforo en rojo solo si:",
+    "opciones": {
+      "a": "La intersección está despejada.",
+      "b": "Gira desde una calle de un solo sentido hacia otra calle de un solo sentido.",
+      "c": "Nunca se puede girar a la izquierda con un semáforo en rojo."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Puede girar a la izquierda con una luz roja cuando gira desde una calle de un solo sentido hacia una calle de un solo sentido. Asegúrese de que no haya una señal que prohíba el giro. Esto se menciona en la página 26 del manual."
+  },
+  {
+    "id": 36,
+    "pregunta": "¿Qué es un 'punto ciego'?",
+    "opciones": {
+      "a": "Un área de la carretera bloqueada por edificios.",
+      "b": "Un área alrededor de su vehículo que no puede ver en sus espejos.",
+      "c": "El punto en el que sus faros ya no iluminan la carretera."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Los puntos ciegos son áreas alrededor del vehículo que un conductor no puede ver al mirar de frente o usando los espejos. Debe girar la cabeza para revisar estas áreas. Esto se explica en la página 64 del manual."
+  },
+  {
+    "id": 37,
+    "pregunta": "El límite de velocidad en un callejón (alley) es:",
+    "opciones": {
+      "a": "15 mph",
+      "b": "20 mph",
+      "c": "25 mph"
+    },
+    "respuesta_correcta": "a",
+    "imagen": null,
+    "explicacion": "El límite de velocidad en cualquier callejón es de 15 mph. Esto se especifica en la página 57 del manual."
+  },
+  {
+    "id": 38,
+    "pregunta": "Al compartir la carretera con un vehículo de tren ligero, usted:",
+    "opciones": {
+      "a": "Siempre tiene el derecho de paso.",
+      "b": "Puede rebasarlo por la izquierda cuando está detenido.",
+      "c": "Nunca debe girar delante de un tren ligero que se aproxima."
+    },
+    "respuesta_correcta": "c",
+    "imagen": null,
+    "explicacion": "Los vehículos de tren ligero tienen los mismos derechos y responsabilidades que otros vehículos, pero nunca debe girar delante de uno. Tenga en cuenta sus puntos ciegos. Esto se describe en la página 50 del manual."
+  },
+  {
+    "id": 39,
+    "pregunta": "Si un oficial de policía le pide que se detenga, debe:",
+    "opciones": {
+      "a": "Detenerse inmediatamente en el carril en el que se encuentra.",
+      "b": "Detenerse en un área segura tan pronto como sea posible.",
+      "c": "Encender las luces de emergencia y continuar hasta llegar a su destino."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Encienda su señal de giro a la derecha, muévase completamente hacia el arcén derecho y deténgase en un área bien iluminada cuando sea posible. Esto se explica en la página 35 del manual."
+  },
+  {
+    "id": 40,
+    "pregunta": "Para evitar la fatiga al conducir en un viaje largo, debe:",
+    "opciones": {
+      "a": "Poner música a alto volumen.",
+      "b": "Beber café o bebidas energéticas.",
+      "c": "Detenerse para descansar cada dos horas."
+    },
+    "respuesta_correcta": "c",
+    "imagen": null,
+    "explicacion": "La fatiga y la somnolencia pueden afectar su visión y aumentar su tiempo de reacción. Tomar descansos regulares es una medida de seguridad crucial. Esto se relaciona con la conducción segura discutida en la página 15 del manual."
+  },
+  {
+    "id": 41,
+    "pregunta": "Un niño menor de 2 años debe viajar en un asiento de seguridad para niños orientado hacia atrás, a menos que pese 40 libras o más, o mida ____ o más.",
+    "opciones": {
+      "a": "3 pies y 4 pulgadas (40 pulgadas)",
+      "b": "4 pies",
+      "c": "4 pies y 9 pulgadas"
+    },
+    "respuesta_correcta": "a",
+    "imagen": null,
+    "explicacion": "Los niños menores de 2 años, que pesen menos de 40 libras y midan menos de 3 pies y 4 pulgadas de alto deben ir en un sistema de retención infantil orientado hacia atrás. Esto se especifica en la página 72 del manual."
+  },
+  {
+    "id": 42,
+    "pregunta": "Esta señal con forma de diamante significa:",
+    "opciones": {
+      "a": "Debe detenerse más adelante.",
+      "b": "Se aproxima a una zona de obras viales.",
+      "c": "Advertencia de condiciones o peligros específicos en la carretera."
+    },
+    "respuesta_correcta": "c",
+    "imagen": "diamond_shape_warning_sign.png",
+    "explicacion": "Una señal con forma de diamante es una señal de advertencia que le alerta sobre condiciones específicas de la carretera y peligros que se aproximan. Esto se describe en la página 44 del manual."
+  },
+  {
+    "id": 43,
+    "pregunta": "Si el acelerador se atasca, usted debe:",
+    "opciones": {
+      "a": "Intentar levantarlo con el pie.",
+      "b": "Cambiar a neutral, aplicar los frenos y salir de la carretera.",
+      "c": "Apagar el motor inmediatamente."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Si el acelerador se atasca, cambie a neutral y aplique los frenos. Busque una forma de salir de la carretera de manera segura. Esta es una respuesta estándar de emergencia no detallada explícitamente, pero es la acción correcta y segura."
+  },
+  {
+    "id": 44,
+    "pregunta": "Al conducir bajo una lluvia intensa o niebla, debe usar:",
+    "opciones": {
+      "a": "Luces altas.",
+      "b": "Luces bajas.",
+      "c": "Solo luces de estacionamiento."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "En condiciones de mal tiempo, como niebla, lluvia o nieve, debe encender sus luces bajas. Las luces altas pueden reflejarse y empeorar la visibilidad. Esto se menciona en las páginas 17 y 70 del manual."
+  },
+  {
+    "id": 45,
+    "pregunta": "¿Qué significa una acera (bordillo) pintada de amarillo?",
+    "opciones": {
+      "a": "Puede estacionar por un tiempo limitado.",
+      "b": "Detenerse solo el tiempo suficiente para cargar o descargar pasajeros o carga.",
+      "c": "Solo para vehículos de emergencia."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Una acera amarilla indica una zona para cargar y descargar pasajeros y carga. No se detenga más tiempo del indicado. Esto se detalla en la página 34 del manual."
+  },
+  {
+    "id": 46,
+    "pregunta": "En una carretera de varios carriles, el carril del extremo izquierdo está destinado a:",
+    "opciones": {
+      "a": "Conducción lenta.",
+      "b": "Rebasar y girar a la izquierda.",
+      "c": "Salir de la carretera."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "En una carretera de varios carriles, el carril del extremo izquierdo (el 'carril rápido' o carril número 1) se usa para rebasar a otros vehículos o para girar a la izquierda. Esto se describe en la página 21 del manual."
+  },
+  {
+    "id": 47,
+    "pregunta": "Si tiene una llanta reventada (blowout) mientras conduce, debe:",
+    "opciones": {
+      "a": "Frenar bruscamente y detenerse.",
+      "b": "Sujetar firmemente el volante, mantener el vehículo en línea recta y reducir la velocidad gradualmente.",
+      "c": "Acelerar para mantener el control."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Si una llanta revienta, no entre en pánico. Sujete el volante con ambas manos, libere gradualmente el acelerador y corrija la dirección para mantener el vehículo estable antes de detenerse. Esto se explica en la página 74 del manual."
+  },
+  {
+    "id": 48,
+    "pregunta": "Las líneas discontinuas blancas grandes en un carril de la autopista indican:",
+    "opciones": {
+      "a": "Que el carril está a punto de terminar o que se dirige a una salida.",
+      "b": "Que es un carril de alta ocupación (HOV).",
+      "c": "Que el límite de velocidad va a cambiar."
+    },
+    "respuesta_correcta": "a",
+    "imagen": null,
+    "explicacion": "Los carriles de autopista que terminan suelen estar marcados con grandes líneas blancas discontinuas. Esté preparado para salir de la autopista o para que el carril termine. Esto se menciona en la página 20 del manual."
+  },
+  {
+    "id": 49,
+    "pregunta": "Es ilegal conducir en un carril para bicicletas a menos que usted:",
+    "opciones": {
+      "a": "Vaya a rebasar a un vehículo lento.",
+      "b": "Quiera conducir más rápido que el tráfico.",
+      "c": "Esté estacionando (donde esté permitido), entrando o saliendo de la carretera, o girando (dentro de 200 pies de la intersección)."
+    },
+    "respuesta_correcta": "c",
+    "imagen": null,
+    "explicacion": "No debe conducir en un carril para bicicletas a menos que esté realizando una de las acciones permitidas, como prepararse para un giro dentro de los 200 pies de la intersección. Esto se especifica en la página 23 del manual."
+  },
+  {
+    "id": 50,
+    "pregunta": "Cuando sigue a una motocicleta, debe:",
+    "opciones": {
+      "a": "Seguirla de cerca para que el conductor sepa que está ahí.",
+      "b": "Mantener una distancia de seguimiento mayor que la de un automóvil.",
+      "c": "Intentar compartir el carril con la motocicleta."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Permita una distancia de seguimiento segura de tres segundos. Este espacio le ayudará a evitar golpear a un motociclista si frena o cae repentinamente. Esto se recomienda en la página 50 del manual."
+  },
+  {
+    "id": 51,
+    "pregunta": "Esta señal circular amarilla y negra significa que se está acercando a:",
+    "opciones": {
+      "a": "Una rotonda (roundabout).",
+      "b": "Un cruce de ferrocarril.",
+      "c": "Una zona escolar."
+    },
+    "respuesta_correcta": "b",
+    "imagen": "railroad_crossing_sign.png",
+    "explicacion": "Una señal circular amarilla y negra o una señal en forma de X indica que se está acercando a un cruce de ferrocarril. Mire, escuche, reduzca la velocidad y prepárese para detenerse. Esto se describe en la página 44 del manual."
+  },
+  {
+    "id": 52,
+    "pregunta": "Cuando dos vehículos se encuentran en una carretera de montaña estrecha y empinada donde ninguno puede pasar, ¿quién tiene el derecho de paso?",
+    "opciones": {
+      "a": "El vehículo que va cuesta arriba.",
+      "b": "El vehículo que va cuesta abajo.",
+      "c": "El vehículo que llegó primero."
+    },
+    "respuesta_correcta": "a",
+    "imagen": null,
+    "explicacion": "El vehículo que va cuesta arriba tiene el derecho de paso. El vehículo que va cuesta abajo tiene más control al retroceder. El vehículo cuesta abajo debe retroceder hasta que el vehículo cuesta arriba pueda pasar. Esto se especifica en la página 48 del manual."
+  },
+  {
+    "id": 53,
+    "pregunta": "Usted ha consentido en tomar una prueba química de aliento, sangre u orina si:",
+    "opciones": {
+      "a": "Está involucrado en una colisión.",
+      "b": "Un oficial de la ley sospecha que está conduciendo bajo la influencia.",
+      "c": "Tiene menos de 21 años."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Cuando conduce en California, usted consiente en someterse a una prueba de aliento, sangre u orina si un oficial de la ley sospecha que está bajo la influencia del alcohol o las drogas (DUI). Esto se explica en la página 80 del manual."
+  },
+  {
+    "id": 54,
+    "pregunta": "El límite de velocidad en un distrito comercial o residencial, a menos que se indique lo contrario, es de:",
+    "opciones": {
+      "a": "20 mph",
+      "b": "25 mph",
+      "c": "30 mph"
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "El límite de velocidad es de 25 mph en distritos comerciales o residenciales, a menos que se indique algo diferente. Esto se menciona en la página 58 del manual."
+  },
+  {
+    "id": 55,
+    "pregunta": "Puede ser multado con hasta $1,000 y su privilegio de conducir suspendido por un año si es declarado culpable de:",
+    "opciones": {
+      "a": "Conducir 10 mph por encima del límite de velocidad.",
+      "b": "No detenerse ante un autobús escolar con luces rojas intermitentes.",
+      "c": "Estacionarse en una zona de carga y descarga."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Si no se detiene ante un autobús escolar con luces rojas intermitentes, puede ser multado con hasta $1,000 y su privilegio de conducir podría ser suspendido por un año. Esto se detalla en la página 57 del manual."
+  },
+  {
+    "id": 56,
+    "pregunta": "Al cambiar de carril en una autopista, debe mirar por encima del hombro para:",
+    "opciones": {
+      "a": "Revisar el tráfico detrás de usted.",
+      "b": "Revisar sus puntos ciegos.",
+      "c": "Ajustar sus espejos laterales."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Antes de cambiar de carril, revise sus espejos, mire por encima del hombro para verificar sus puntos ciegos y señalice. Esto se explica en la página 21 del manual."
+  },
+  {
+    "id": 57,
+    "pregunta": "Cuando un autobús, tranvía o trolebús está detenido en una zona de seguridad, puede pasar a no más de:",
+    "opciones": {
+      "a": "10 mph",
+      "b": "15 mph",
+      "c": "25 mph"
+    },
+    "respuesta_correcta": "a",
+    "imagen": null,
+    "explicacion": "Cuando un autobús, tranvía o trolebús está detenido en una zona de seguridad o en un semáforo, puede pasar a no más de 10 mph. Esto se especifica en la página 49 del manual."
+  },
+  {
+    "id": 58,
+    "pregunta": "Si un conductor lo sigue de cerca (tailgating), debe:",
+    "opciones": {
+      "a": "Frenar bruscamente para advertirle.",
+      "b": "Aumentar su distancia de seguimiento con el vehículo de adelante y luego cambiar de carril cuando sea seguro.",
+      "c": "Acelerar para alejarse de él."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Si un conductor lo sigue de cerca, mantenga su rumbo y velocidad. Cuando sea seguro, cambie de carril a la derecha para permitir que el 'tailgater' pase. Crear más espacio adelante le da más tiempo para reaccionar. Esto se describe en la página 63 del manual."
+  },
+  {
+    "id": 59,
+    "pregunta": "Las multas por infracciones de tráfico en una zona de construcción son:",
+    "opciones": {
+      "a": "Las mismas que en cualquier otro lugar.",
+      "b": "Reducidas para no retrasar el trabajo.",
+      "c": "Duplicadas o significativamente más altas."
+    },
+    "respuesta_correcta": "c",
+    "imagen": null,
+    "explicacion": "Las multas por infracciones de tráfico en una zona de trabajo pueden ser de $1,000 o más. En las 'Zonas de Multas Dobles Mejoradas por Seguridad', las multas se duplican. Esto se menciona en la página 55 del manual."
+  },
+  {
+    "id": 60,
+    "pregunta": "Un conductor de 18 años puede usar un teléfono celular mientras conduce:",
+    "opciones": {
+      "a": "En cualquier momento, siempre que sea breve.",
+      "b": "Solo con un dispositivo de manos libres.",
+      "c": "Solo para enviar mensajes de texto, no para hablar."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Los conductores adultos (18 años o más) solo pueden usar un teléfono celular en modo manos libres. Los menores no pueden usarlo en absoluto, excepto en emergencias. Esto se explica en las páginas 76-77 del manual."
+  },
+  {
+    "id": 61,
+    "pregunta": "¿Qué indica una línea de 'ceda el paso'?",
+    "opciones": {
+      "a": "Una línea de límite donde debe detenerse por completo.",
+      "b": "Una línea de triángulos blancos que muestra dónde ceder el paso o detenerse.",
+      "c": "El comienzo de una zona de no rebasar."
+    },
+    "respuesta_correcta": "b",
+    "imagen": "yield_line.png",
+    "explicacion": "Una línea de ceda el paso es una línea continua de triángulos blancos que muestra a los vehículos que se aproximan dónde ceder el paso o detenerse. Esto se describe en la página 20 del manual."
+  },
+  {
+    "id": 62,
+    "pregunta": "Al estacionar cuesta abajo en una calle con acera (bordillo), debe girar las ruedas delanteras:",
+    "opciones": {
+      "a": "Hacia la acera.",
+      "b": "Rectas.",
+      "c": "Hacia el lado contrario de la acera."
+    },
+    "respuesta_correcta": "a",
+    "imagen": "parking_downhill_curb.png",
+    "explicacion": "Al estacionar cuesta abajo, gire las ruedas delanteras hacia la acera o hacia el lado derecho de la carretera. Esto se detalla en la página 33 del manual."
+  },
+  {
+    "id": 63,
+    "pregunta": "El límite de velocidad máximo en la mayoría de las autopistas de California es de:",
+    "opciones": {
+      "a": "55 mph",
+      "b": "65 mph",
+      "c": "70 mph"
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "A menos que se indique lo contrario, el límite de velocidad máximo ideal en la mayoría de las autopistas de California es de 65 mph. Esto se especifica en la página 73 del manual."
+  },
+  {
+    "id": 64,
+    "pregunta": "Puede conducir en un carril central de giro a la izquierda por no más de:",
+    "opciones": {
+      "a": "100 pies",
+      "b": "200 pies",
+      "c": "300 pies"
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Solo puede conducir por 200 pies en el carril central de giro a la izquierda. Este carril es para prepararse y hacer un giro a la izquierda o una vuelta en U. Esto se explica en la página 22 del manual."
+  },
+  {
+    "id": 65,
+    "pregunta": "Un semáforo con una flecha amarilla intermitente significa:",
+    "opciones": {
+      "a": "El tiempo de giro protegido está terminando.",
+      "b": "Puede girar, pero su giro no está protegido del tráfico que se aproxima.",
+      "c": "Debe detenerse y esperar una flecha verde."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Una flecha amarilla intermitente significa que puede girar, pero su giro no está protegido de otro tráfico. Proceda a girar a la izquierda después de ceder el paso al tráfico que se aproxima. Esto se describe en la página 40 del manual."
+  },
+  {
+    "id": 66,
+    "pregunta": "Si un semáforo no funciona, debe:",
+    "opciones": {
+      "a": "Continuar con precaución.",
+      "b": "Detenerse como si la intersección estuviera controlada por señales de ALTO en todas las direcciones.",
+      "c": "Reducir la velocidad y ceder el paso al tráfico a su derecha."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Cuando un semáforo no funciona, deténgase como si la intersección estuviera controlada por señales de ALTO en todas las direcciones. Luego, proceda con cautela. Esto se explica en la página 40 del manual."
+  },
+  {
+    "id": 67,
+    "pregunta": "Al conducir en presencia de niebla, debe:",
+    "opciones": {
+      "a": "Conducir lentamente, usar las luces bajas y aumentar la distancia de seguimiento.",
+      "b": "Usar las luces altas para ver más lejos.",
+      "c": "Seguir de cerca las luces traseras del vehículo de adelante."
+    },
+    "respuesta_correcta": "a",
+    "imagen": null,
+    "explicacion": "En la niebla, conduzca despacio, use las luces bajas (las altas reflejarán el resplandor), y asegúrese de que puede detenerse en el espacio que puede ver adelante. Esto se detalla en la página 70 del manual."
+  },
+  {
+    "id": 68,
+    "pregunta": "Debe tener su comprobante de responsabilidad financiera (seguro) cuando:",
+    "opciones": {
+      "a": "Conduce y para una prueba de manejo.",
+      "b": "Solo cuando lo detiene la policía.",
+      "c": "Solo si está involucrado en una colisión."
+    },
+    "respuesta_correcta": "a",
+    "imagen": null,
+    "explicacion": "Debe tener su comprobante de seguro cuando conduce y para una prueba de manejo. Si se ve involucrado en una colisión, debe mostrarlo a los otros conductores. Esto se especifica en la página 82 del manual."
+  },
+  {
+    "id": 69,
+    "pregunta": "El método de dirección 'mano a mano' (push/pull) se recomienda para:",
+    "opciones": {
+      "a": "Giros a baja velocidad y estacionamiento.",
+      "b": "La mayoría de las situaciones de conducción para mantener el control.",
+      "c": "Conducir marcha atrás."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "El método de dirección mano a mano es crítico para mantener ambas manos en el volante. Comience con las manos en la posición 9 y 3 en punto o 8 y 4 en punto. Esto se describe en la página 15 del manual."
+  },
+  {
+    "id": 70,
+    "pregunta": "El límite de velocidad en una intersección ciega es de:",
+    "opciones": {
+      "a": "15 mph",
+      "b": "20 mph",
+      "c": "25 mph"
+    },
+    "respuesta_correcta": "a",
+    "imagen": null,
+    "explicacion": "El límite de velocidad para una intersección ciega es de 15 mph. Esto se menciona en la página 57 del manual."
+  },
+  {
+    "id": 71,
+    "pregunta": "Si un ciclista en un carril de circulación viaja más lento que el tráfico, debe:",
+    "opciones": {
+      "a": "Tocar la bocina para que se mueva.",
+      "b": "Seguirlo de cerca hasta que gire.",
+      "c": "Cambiar a otro carril para rebasarlo de manera segura, dejando al menos tres pies de espacio."
+    },
+    "respuesta_correcta": "c",
+    "imagen": null,
+    "explicacion": "Para rebasar a un ciclista de manera segura, es posible que necesite cambiar a otro carril. Deje suficiente espacio entre su vehículo y el ciclista, al menos tres pies. Esto se explica en la página 54 del manual."
+  },
+  {
+    "id": 72,
+    "pregunta": "Una acera (bordillo) pintada de rojo significa:",
+    "opciones": {
+      "a": "No detenerse, pararse o estacionarse.",
+      "b": "Solo para carga y descarga de pasajeros.",
+      "c": "Estacionamiento de corta duración."
+    },
+    "respuesta_correcta": "a",
+    "imagen": null,
+    "explicacion": "Una acera roja significa que no está permitido detenerse, pararse o estacionarse. Los autobuses pueden detenerse en una zona roja marcada para autobuses. Esto se detalla en la página 34 del manual."
+  },
+  {
+    "id": 73,
+    "pregunta": "El límite legal de BAC para un conductor menor de 21 años es de:",
+    "opciones": {
+      "a": "0.08%",
+      "b": "0.05%",
+      "c": "0.01%"
+    },
+    "respuesta_correcta": "c",
+    "imagen": null,
+    "explicacion": "Es ilegal que una persona menor de 21 años conduzca con un BAC de 0.01% o superior. Esto se especifica en la página 79 del manual."
+  },
+  {
+    "id": 74,
+    "pregunta": "Al estacionarse en paralelo, su vehículo debe estar a menos de ____ pulgadas de la acera.",
+    "opciones": {
+      "a": "12 pulgadas",
+      "b": "18 pulgadas",
+      "c": "24 pulgadas"
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Cuando estacione en paralelo, su vehículo debe estar paralelo y a menos de 18 pulgadas de la acera. Esto se menciona en la página 32 del manual."
+  },
+  {
+    "id": 75,
+    "pregunta": "Es ilegal fumar en un vehículo cuando:",
+    "opciones": {
+      "a": "Está conduciendo en una zona escolar.",
+      "b": "Hay un menor de edad presente.",
+      "c": "Transporta mascotas."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "No debe fumar cuando hay un menor de edad en el vehículo. Puede ser multado. Esto se especifica en la página 58 del manual."
+  },
+  {
+    "id": 76,
+    "pregunta": "Si pierde su salida en la autopista, debe:",
+    "opciones": {
+      "a": "Retroceder por el arcén.",
+      "b": "Continuar hasta la siguiente salida.",
+      "c": "Hacer una vuelta en U en la mediana."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Si pierde una salida, continúe conduciendo hasta la siguiente. Nunca retroceda ni haga una vuelta en U en una autopista. Esto se relaciona con los procedimientos de salida seguros en la página 29 del manual."
+  },
+  {
+    "id": 77,
+    "pregunta": "Una línea amarilla discontinua en el centro de la carretera indica que:",
+    "opciones": {
+      "a": "Se permite rebasar si es seguro.",
+      "b": "El tráfico se mueve en una dirección.",
+      "c": "Hay una zona de no rebasar."
+    },
+    "respuesta_correcta": "a",
+    "imagen": null,
+    "explicacion": "Una línea amarilla discontinua indica que puede rebasar si la línea discontinua está junto a su carril de conducción y es seguro hacerlo. Esto se explica en la página 19 del manual."
+  },
+  {
+    "id": 78,
+    "pregunta": "De acuerdo con esta imagen de señal de mano, el conductor indica:",
+    "opciones": {
+      "a": "Giro a la derecha.",
+      "b": "Giro a la izquierda.",
+      "c": "Reducir la velocidad o detenerse."
+    },
+    "respuesta_correcta": "c",
+    "imagen": "hand_signal_slow_stop.png",
+    "explicacion": "La señal de mano para reducir la velocidad o detenerse es extender la mano y el brazo hacia abajo. Las señales de mano se muestran en la página 16 del manual."
+  },
+  {
+    "id": 79,
+    "pregunta": "Los conductores están obligados a detenerse para los peatones:",
+    "opciones": {
+      "a": "Solo en cruces de peatones marcados.",
+      "b": "Tanto en cruces de peatones marcados como no marcados.",
+      "c": "Solo cuando el peatón hace contacto visual."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "Los peatones tienen el derecho de paso en cruces de peatones marcados y no marcados. Siempre debe ceder el paso. Esto se detalla en la página 47 del manual."
+  },
+  {
+    "id": 80,
+    "pregunta": "El 'REAL ID' es necesario a partir de mayo de 2025 para:",
+    "opciones": {
+      "a": "Comprar alcohol.",
+      "b": "Abordar vuelos nacionales y entrar en instalaciones federales.",
+      "c": "Votar en las elecciones."
+    },
+    "respuesta_correcta": "b",
+    "imagen": null,
+    "explicacion": "A partir de mayo de 2025, necesitará una licencia de conducir o tarjeta de identificación compatible con REAL ID si desea usarla para abordar un avión para vuelos nacionales o para entrar en bases militares y la mayoría de las instalaciones federales. Esto se explica en la página 7 del manual."
+  }
+]
