@@ -45,22 +45,23 @@ La aplicación contará con dos modos de operación principales:
 
 ### **5. Estructura del Proyecto**
 El proyecto se organizará con la siguiente estructura de carpetas y archivos:
-/simulador_examen/
-|
-|-- app.py # Lógica principal de la aplicación Flask
-|-- preguntas.json # Banco de todas las preguntas y respuestas
-|
-|-- /static/
-| |-- /css/
-| | |-- style.css # Archivo de estilos para el frontend
-| |-- /images/
-| | |-- no_u_turn.png # Ejemplo de imagen para una pregunta
-| | |-- ... # Resto de imágenes
-|
-|-- /templates/
-|-- index.html # Página de inicio
-|-- test.html # Plantilla para mostrar las preguntas
-|-- resultado.html # Página para mostrar los resultados
+
+    /simulador_examen/
+    |
+    |-- app.py # Lógica principal de la aplicación Flask
+    |-- preguntas.json # Banco de todas las preguntas y respuestas
+    |
+    |-- /static/
+    | |-- /css/
+    | | |-- style.css # Archivo de estilos para el frontend
+    | |-- /images/
+    | | |-- no_u_turn.png # Ejemplo de imagen para una pregunta
+    | | |-- ... # Resto de imágenes
+    |
+    |-- /templates/
+    |-- index.html # Página de inicio
+    |-- test.html # Plantilla para mostrar las preguntas
+    |-- resultado.html # Página para mostrar los resultados
 
 ### **6. Desarrolladores**
 - Sebastian Chapa
