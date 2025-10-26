@@ -10,32 +10,37 @@
         h1 { text-align: center; color: #0056b3; }
         .pregunta-bloque { margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
         .pregunta-texto { font-size: 1.2em; font-weight: bold; margin-bottom: 15px; }
-        .pregunta-imagen { max-width: 300px; display: block; margin: 15px 0; }
-        .opciones label { display: block; background-color: #f8f9fa; padding: 15px; margin-bottom: 10px; border-radius: 5px; cursor: pointer; border: 1px solid #ddd; }
+        .pregunta-imagen { max-width: 300px; display: block; margin: 15px auto; border-radius: 5px; }
+        .opciones label { display: block; background-color: #f8f9fa; padding: 15px; margin-bottom: 10px; border-radius: 5px; cursor: pointer; border: 1px solid #ddd; transition: background-color 0.2s; }
         .opciones label:hover { background-color: #e2e6ea; }
         .opciones input { margin-right: 10px; }
-        .submit-btn { display: block; width: 100%; padding: 15px; font-size: 18px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .submit-btn { display: block; width: 100%; padding: 15px; font-size: 18px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px;}
+        .timer { position: fixed; top: 10px; right: 10px; padding: 10px; background-color: rgba(0,0,0,0.7); color: white; border-radius: 5px; font-size: 1.1em; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🚗 Modo {{ tipo_examen }} 🏁</h1>
         
-        <!-- El formulario enviará las respuestas a una ruta /resultado que crearemos después -->
-        <form action="/resultado" method="POST">
+        <form id="examen-form" action="/resultado" method="POST">
+            <!-- Campo oculto para enviar el tipo de examen al backend -->
+            <input type="hidden" name="tipo_examen" value="{{ tipo_examen }}">
             
-            <!-- Usamos un bucle de Jinja2 para mostrar cada pregunta -->
+            <!-- ========= INICIO DEL CÓDIGO CORREGIDO ========= -->
+            
+            <!-- Bucle para iterar sobre cada pregunta enviada desde Flask -->
             {% for pregunta in preguntas %}
             <div class="pregunta-bloque">
+                <!-- Muestra el número y el texto de la pregunta -->
                 <p class="pregunta-texto">{{ loop.index }}. {{ pregunta.pregunta }}</p>
                 
-                <!-- Si la pregunta tiene una imagen, la mostramos -->
+                <!-- Si la pregunta tiene una imagen, la muestra -->
                 {% if pregunta.imagen %}
                     <img src="{{ url_for('static', filename='images/' + pregunta.imagen) }}" alt="Imagen de la pregunta" class="pregunta-imagen">
                 {% endif %}
                 
                 <div class="opciones">
-                    <!-- Iteramos sobre las opciones de cada pregunta -->
+                    <!-- Bucle para mostrar cada una de las opciones de la pregunta -->
                     {% for key, value in pregunta.opciones.items() %}
                     <label>
                         <input type="radio" name="pregunta-{{ pregunta.id }}" value="{{ key }}" required>
@@ -46,8 +51,37 @@
             </div>
             {% endfor %}
 
+            <!-- ========= FIN DEL CÓDIGO CORREGIDO ========= -->
+
             <button type="submit" class="submit-btn">Finalizar y Calificar</button>
         </form>
     </div>
+
+    <!-- Script para el temporizador -->
+    <script>
+        const TIPO_EXAMEN = "{{ tipo_examen }}";
+        const TIEMPO_LIMITE_MINUTOS = (TIPO_EXAMEN === "Examen Final") ? 40 : 20;
+        
+        let tiempoRestante = TIEMPO_LIMITE_MINUTOS * 60;
+        const timerElement = document.createElement('div');
+        timerElement.className = 'timer'; // Asignamos una clase para el estilo
+        document.body.appendChild(timerElement);
+
+        const intervalo = setInterval(() => {
+            if (tiempoRestante > 0) {
+                tiempoRestante--;
+            }
+            
+            const minutos = Math.floor(tiempoRestante / 60);
+            const segundos = tiempoRestante % 60;
+            timerElement.textContent = `Tiempo: ${minutos}:${segundos < 10 ? '0' : ''}${segundos}`;
+            
+            if (tiempoRestante <= 0) {
+                clearInterval(intervalo);
+                alert("¡El tiempo se ha agotado! El examen se enviará automáticamente.");
+                document.getElementById('examen-form').submit(); // Enviamos el formulario por su ID
+            }
+        }, 1000);
+    </script>
 </body>
 </html>

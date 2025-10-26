@@ -2,25 +2,38 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulador de Examen de Manejo</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; background-color: #f0f2f5; margin-top: 50px; }
         .container { background-color: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: inline-block; }
-        h1 { color: #333; }
-        p { color: #666; }
+        .user-info { text-align: right; margin-bottom: 20px; }
         .btn { display: inline-block; padding: 15px 30px; margin: 10px; font-size: 18px; color: white; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; }
         .btn-practica { background-color: #007bff; }
         .btn-examen { background-color: #dc3545; }
+        .btn-disabled { background-color: #6c757d; cursor: not-allowed; }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="user-info">
+            Bienvenido, <strong>{{ session.username }}</strong> | <a href="/logout">Cerrar Sesión</a>
+        </div>
         <h1>🚗 Simulador de Examen Teórico de Manejo 🏁</h1>
-        <p>Elige un modo para comenzar:</p>
+        <p>Intentos de Práctica Realizados: {{ intentos.practica }} / 6</p>
+        <p>Intentos de Examen Final Realizados: {{ intentos.final }} / 3</p>
         <div>
-            <a href="/practica" class="btn btn-practica">Modo Práctica</a>
-            <a href="/examen" class="btn btn-examen">Examen Final</a>
+            <!-- Deshabilitar el botón si se alcanza el límite -->
+            {% if intentos.practica < 6 %}
+                <a href="/practica" class="btn btn-practica">Modo Práctica</a>
+            {% else %}
+                <a href="#" class="btn btn-disabled">Práctica (Límite alcanzado)</a>
+            {% endif %}
+            
+            {% if intentos.final < 3 %}
+                <a href="/examen" class="btn btn-examen">Examen Final</a>
+            {% else %}
+                <a href="#" class="btn btn-disabled">Examen (Límite alcanzado)</a>
+            {% endif %}
         </div>
     </div>
 </body>
