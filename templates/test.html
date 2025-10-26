@@ -8,7 +8,8 @@
         body { font-family: Arial, sans-serif; background-color: #f0f2f5; color: #333; }
         .container { max-width: 800px; margin: 20px auto; background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         h1 { text-align: center; color: #0056b3; }
-        .pregunta-bloque { margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+        .pregunta-bloque { display: none; /* Ocultamos todas las preguntas por defecto */ }
+        .pregunta-activa { display: block; /* Mostramos solo la pregunta activa */ }
         .pregunta-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .pregunta-texto { font-size: 1.2em; font-weight: bold; flex-grow: 1; }
         .valor-puntos { font-size: 0.9em; font-weight: bold; color: #007bff; background-color: #eef7ff; padding: 5px 10px; border-radius: 15px; white-space: nowrap; }
@@ -16,8 +17,9 @@
         .opciones label { display: block; background-color: #f8f9fa; padding: 15px; margin-bottom: 10px; border-radius: 5px; cursor: pointer; border: 1px solid #ddd; transition: background-color 0.2s; }
         .opciones label:hover { background-color: #e2e6ea; }
         .opciones input { margin-right: 10px; }
-        .submit-btn { display: block; width: 100%; padding: 15px; font-size: 18px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px;}
-        .timer { position: fixed; top: 10px; right: 10px; padding: 10px; background-color: rgba(0,0,0,0.7); color: white; border-radius: 5px; font-size: 1.1em; font-weight: bold; }
+        .navegacion { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+        .progreso { font-weight: bold; }
+        .timer { font-size: 1.5em; font-weight: bold; color: #dc3545; }
     </style>
 </head>
 <body>
@@ -27,60 +29,106 @@
         <form id="examen-form" action="/resultado" method="POST">
             <input type="hidden" name="tipo_examen" value="{{ tipo_examen }}">
             
+            <!-- Iteramos sobre las preguntas para generarlas en el HTML, pero ocultas -->
             {% for pregunta in preguntas %}
-            <div class="pregunta-bloque">
-                
-                <!-- ========= INICIO DE LA MEJORA ========= -->
+            <div class="pregunta-bloque" id="bloque-{{ loop.index0 }}">
                 <div class="pregunta-header">
                     <p class="pregunta-texto">{{ loop.index }}. {{ pregunta.pregunta }}</p>
                     <span class="valor-puntos">Valor: {{ puntos_por_pregunta }} puntos</span>
                 </div>
-                <!-- ========= FIN DE LA MEJORA ========= -->
-
                 {% if pregunta.imagen %}
                     <img src="{{ url_for('static', filename='images/' + pregunta.imagen) }}" alt="Imagen de la pregunta" class="pregunta-imagen">
                 {% endif %}
-                
                 <div class="opciones">
                     {% for key, value in pregunta.opciones.items() %}
                     <label>
-                        <input type="radio" name="pregunta-{{ pregunta.id }}" value="{{ key }}" required>
+                        <input type="radio" name="pregunta-{{ pregunta.id }}" value="{{ key }}">
                         {{ value }}
                     </label>
                     {% endfor %}
                 </div>
             </div>
             {% endfor %}
-
-            <button type="submit" class="submit-btn">Finalizar y Calificar</button>
         </form>
+
+        <!-- Controles de navegación y temporizador -->
+        <div class="navegacion">
+            <span class="progreso" id="progreso-texto"></span>
+            <span class="timer" id="timer-texto">Tiempo: 60</span>
+        </div>
     </div>
 
-    <!-- Script para el temporizador -->
     <script>
-        const TIPO_EXAMEN = "{{ tipo_examen }}";
-        const TIEMPO_LIMITE_MINUTOS = (TIPO_EXAMEN === "Examen Final") ? 40 : 20;
-        
-        let tiempoRestante = TIEMPO_LIMITE_MINUTOS * 60;
-        const timerElement = document.createElement('div');
-        timerElement.className = 'timer'; // Asignamos una clase para el estilo
-        document.body.appendChild(timerElement);
+        // --- LÓGICA DEL TEMPORIZADOR POR PREGUNTA ---
 
-        const intervalo = setInterval(() => {
-            if (tiempoRestante > 0) {
-                tiempoRestante--;
+        const preguntas = document.querySelectorAll('.pregunta-bloque');
+        const progresoTexto = document.getElementById('progreso-texto');
+        const timerTexto = document.getElementById('timer-texto');
+        const form = document.getElementById('examen-form');
+        
+        let preguntaActualIndex = 0;
+        let tiempoRestante = 60;
+        let intervalo;
+
+        function mostrarSiguientePregunta() {
+            // Detener el temporizador anterior
+            clearInterval(intervalo);
+            
+            // Ocultar la pregunta actual
+            if (preguntas[preguntaActualIndex]) {
+                preguntas[preguntaActualIndex].classList.remove('pregunta-activa');
             }
+
+            preguntaActualIndex++;
+
+            // Si hemos pasado todas las preguntas, enviar el formulario
+            if (preguntaActualIndex >= preguntas.length) {
+                finalizarExamen();
+                return;
+            }
+
+            // Mostrar la nueva pregunta
+            preguntas[preguntaActualIndex].classList.add('pregunta-activa');
             
-            const minutos = Math.floor(tiempoRestante / 60);
-            const segundos = tiempoRestante % 60;
-            timerElement.textContent = `Tiempo: ${minutos}:${segundos < 10 ? '0' : ''}${segundos}`;
+            // Actualizar el progreso
+            progresoTexto.textContent = `Pregunta ${preguntaActualIndex + 1} de ${preguntas.length}`;
             
+            // Reiniciar e iniciar el nuevo temporizador
+            tiempoRestante = 60;
+            actualizarTimer();
+            intervalo = setInterval(actualizarTimer, 1000);
+        }
+
+        function actualizarTimer() {
+            timerTexto.textContent = `Tiempo: ${tiempoRestante}`;
             if (tiempoRestante <= 0) {
-                clearInterval(intervalo);
-                alert("¡El tiempo se ha agotado! El examen se enviará automáticamente.");
-                document.getElementById('examen-form').submit(); // Enviamos el formulario por su ID
+                mostrarSiguientePregunta(); // El tiempo se acabó, pasar a la siguiente
             }
-        }, 1000);
+            tiempoRestante--;
+        }
+
+        function finalizarExamen() {
+            alert("Has completado el examen. Se enviarán tus respuestas.");
+            form.submit();
+        }
+
+        // --- INICIO DEL EXAMEN ---
+        
+        // Mostrar la primera pregunta
+        preguntas[0].classList.add('pregunta-activa');
+        progresoTexto.textContent = `Pregunta 1 de ${preguntas.length}`;
+
+        // Añadir un 'listener' a cada opción de respuesta
+        document.querySelectorAll('.opciones input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                // Cuando el usuario selecciona una respuesta, esperamos un poco y pasamos a la siguiente
+                setTimeout(mostrarSiguientePregunta, 300); // 300ms de espera
+            });
+        });
+        
+        // Iniciar el primer temporizador
+        intervalo = setInterval(actualizarTimer, 1000);
+
     </script>
 </body>
 </html>
