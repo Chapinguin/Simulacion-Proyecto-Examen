@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Examen - Modo {{ tipo_examen }}</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            background-color: #1a202c;
+            background-image: url('https://images.unsplash.com/photo-1737917818705-c69c1df72db4?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE4fHx8ZW58MHx8fHx8'); /* <-- CAMBIA ESTA URL POR TU IMAGEN */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: #f4f4f4;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        h1 { text-align: center; color: #0056b3; margin-top: 0; }
+        .pregunta-bloque { display: none; }
+        .pregunta-activa { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .pregunta-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; gap: 15px; }
+        .pregunta-texto { font-size: 1.3em; font-weight: bold; flex-grow: 1; color: #333; }
+        .valor-puntos { font-size: 0.9em; font-weight: bold; color: #007bff; background-color: #e2eefe; padding: 6px 12px; border-radius: 20px; white-space: nowrap; }
+        .pregunta-imagen { max-width: 100%; height: auto; max-height: 250px; display: block; margin: 20px auto; border-radius: 8px; }
+        .opciones label {
+            display: block;
+            background-color: white;
+            padding: 18px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            transition: background-color 0.2s, border-color 0.2s, transform 0.1s;
+        }
+        .opciones label:hover { background-color: #e9ecef; border-color: #007bff; }
+        .opciones label:active { transform: scale(0.99); }
+        .opciones input { margin-right: 12px; }
+        .navegacion { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; border-top: 1px solid #ccc; padding-top: 20px; }
+        .progreso { font-weight: bold; font-size: 1.1em; color: #555;}
+        .timer { font-size: 1.5em; font-weight: bold; color: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚗 Modo {{ tipo_examen }} 🏁</h1>
+
+        <form id="examen-form" action="/resultado" method="POST">
+            <input type="hidden" name="tipo_examen" value="{{ tipo_examen }}">
+            
+            {% for pregunta in preguntas %}
+            <div class="pregunta-bloque" id="bloque-{{ loop.index0 }}">
+                <div class="pregunta-header">
+                    <p class="pregunta-texto">{{ loop.index }}. {{ pregunta.texto_pregunta }}</p>
+                    <span class="valor-puntos">Valor: {{ puntos_por_pregunta }} puntos</span>
+                </div>
+
+                {% if pregunta.imagen_path %}
+                    <img src="{{ url_for('static', filename=pregunta.imagen_path) }}" alt="Imagen de la pregunta" class="pregunta-imagen">
+                {% endif %}
+
+                <div class="opciones">
+                    {% for opcion in pregunta.opciones %}
+                    <label>
+                        <input type="radio" name="pregunta-{{ pregunta.id }}" value="{{ opcion.id }}" required>
+                        {{ opcion.texto_opcion }}
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </form>
+
+        <div class="navegacion">
+            <span class="progreso" id="progreso-texto"></span>
+            <span class="timer" id="timer-texto">Tiempo: 60</span>
+        </div>
+    </div>
+
+    <script>
+        const preguntas = document.querySelectorAll('.pregunta-bloque');
+        const progresoTexto = document.getElementById('progreso-texto');
+        const timerTexto = document.getElementById('timer-texto');
+        const form = document.getElementById('examen-form');
+        
+        let preguntaActualIndex = 0;
+        let tiempoRestante = 60;
+        let intervalo;
+
+        function mostrarSiguientePregunta() {
+            clearInterval(intervalo);
+            
+            if (preguntas[preguntaActualIndex]) {
+                preguntas[preguntaActualIndex].classList.remove('pregunta-activa');
+            }
+
+            preguntaActualIndex++;
+
+            if (preguntaActualIndex >= preguntas.length) {
+                finalizarExamen();
+                return;
+            }
+
+            preguntas[preguntaActualIndex].classList.add('pregunta-activa');
+            progresoTexto.textContent = `Pregunta ${preguntaActualIndex + 1} de ${preguntas.length}`;
+            
+            tiempoRestante = 60;
+            actualizarTimer();
+            intervalo = setInterval(actualizarTimer, 1000);
+        }
+
+        function actualizarTimer() {
+            timerTexto.textContent = `Tiempo: ${tiempoRestante}`;
+            if (tiempoRestante <= 0) {
+                mostrarSiguientePregunta();
+            }
+            tiempoRestante--;
+        }
+
+        function finalizarExamen() {
+            alert("Has completado el examen. Se enviarán tus respuestas.");
+            form.submit();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if(preguntas.length > 0) {
+                preguntas[0].classList.add('pregunta-activa');
+                progresoTexto.textContent = `Pregunta 1 de ${preguntas.length}`;
+                
+                document.querySelectorAll('.opciones input[type="radio"]').forEach(radio => {
+                    radio.addEventListener('change', () => {
+                        setTimeout(mostrarSiguientePregunta, 300);
+                    });
+                });
+                
+                intervalo = setInterval(actualizarTimer, 1000);
+            }
+        });
+    </script>
+</body>
+</html>

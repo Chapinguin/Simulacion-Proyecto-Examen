@@ -1,0 +1,16 @@
+# Checklist de Requerimientos del Simulador
+
+- [x] El simulador de practica será de 20 preguntas, este se puede usar hasta 6 veces para fines de estudio y practica por usuario. (10 pts.)
+- [x] El simulador final será de 40 preguntas, este se podrá intentar hasta 3 veces para poder obtener al pase para proceder al examen práctico de manejo. (5 pts.)
+- [x] Las preguntas no se deben repetir en la misma prueba del momento. (10 pts.)
+- [x] El total de reactivos (preguntas) debe de contener 80 preguntas. (5 pts.)
+- [x] Modelo de base de datos válido, normalizado y con buenas prácticas de diseño. (5 pts.)
+- [x] Al finalizar el simulador de practica y final deberán emitir un resultado de calificación en porcentaje y el mensaje si la prueba fue aprobado o no aprobado. (5 pts.)
+- [x] Para aprobar ambas pruebas el porcentaje debe ser igual o mayor a 75%. (5 pts.)
+- [x] En el simulador de practica cada reactivo vale 5 puntos. (5 pts.)
+- [x] En el simulador de drive test final cada reactivo se pondera con 2.5 puntos. (10 pts.)
+- [x] Utilice la estrategia que desee para el control de usuarios que realizan la prueba. (5 pts.)
+- [x] Es forzoso implementar una estrategia aleatoria para cada carga o generación de ambas simulaciones. (5 pts.)
+- [x] Cada pregunta debe contestarse en 1 minuto, si no, se evalúa como errónea y se avanza a la siguiente pregunta. (5 pts.)
+- [x] Poblar datos simulados acorde a tu modelo de datos. (5 pts.)
+- [x] Generar un dashboard, sobre los intentos simulados y las pruebas finales, determinar en base a tu criterio y experiencia algún indicador del beneficio de las pruebas simuladas de estudio vs las pruebas finales. (10 pts.)
