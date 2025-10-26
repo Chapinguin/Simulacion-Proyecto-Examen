@@ -3,60 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resultado del Examen</title>
+    <title>Resultado del {{ tipo_examen }}</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f0f2f5; color: #333; }
-        .container { max-width: 800px; margin: 20px auto; background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .resultado-header { text-align: center; margin-bottom: 30px; }
-        .aprobado { color: #28a745; font-size: 2.5em; font-weight: bold; }
-        .reprobado { color: #dc3545; font-size: 2.5em; font-weight: bold; }
-        .puntaje { font-size: 1.5em; color: #666; }
-        .revision-pregunta { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
-        .pregunta-texto { font-weight: bold; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f0f2f5; color: #333; }
+        .container { max-width: 800px; margin: 20px auto; background-color: white; padding: 30px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+        .resultado-header { text-align: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+        .aprobado { color: #28a745; font-size: 2.8em; font-weight: bold; }
+        .reprobado { color: #dc3545; font-size: 2.8em; font-weight: bold; }
+        .puntaje-summary { margin-top: 15px; }
+        .puntaje-summary table { width: 80%; margin: 20px auto; border-collapse: collapse; }
+        .puntaje-summary td { padding: 10px; border: 1px solid #ddd; }
+        .puntaje-summary .label { font-weight: bold; text-align: right; width: 60%; }
+        .puntaje-summary .value { text-align: left; }
+        .revision-pregunta { margin-top: 25px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        .pregunta-texto { font-weight: bold; font-size: 1.1em;}
         .opcion { margin-left: 20px; }
         .respuesta-correcta { color: #28a745; font-weight: bold; }
         .respuesta-incorrecta { color: #dc3545; font-weight: bold; }
         .explicacion { background-color: #eef7ff; border-left: 4px solid #007bff; padding: 10px; margin-top: 10px; font-style: italic; }
-        .btn-inicio { display: block; width: 200px; margin: 30px auto; text-align: center; padding: 15px; font-size: 18px; background-color: #007bff; color: white; border: none; border-radius: 5px; text-decoration: none; }
+        .btn-inicio { display: block; width: 200px; margin: 40px auto; text-align: center; padding: 15px; font-size: 18px; background-color: #007bff; color: white; border-radius: 5px; text-decoration: none; transition: background-color 0.2s; }
+        .btn-inicio:hover { background-color: #0056b3; }
     </style>
 </head>
+<!-- En templates/resultado.html -->
 <body>
     <div class="container">
         <div class="resultado-header">
             {% if aprobado %}
-                <h1 class="aprobado">¡Felicidades, has APROBADO!</h1>
+                <h1 class="aprobado">✔️ ¡APROBADO! ✔️</h1>
             {% else %}
-                <h1 class="reprobado">Lo sentimos, has REPROBADO.</h1>
+                <h1 class="reprobado">❌ REPROBADO ❌</h1>
             {% endif %}
-            <p class="puntaje">Tu puntaje fue: <strong>{{ puntaje }} / {{ puntaje_maximo }}</strong> ({{ "%.2f"|format(puntaje_porcentual) }}%)</p>
+            
+            <div class="puntaje-summary">
+                <h3>Resumen de Calificación ({{ tipo_examen }})</h3>
+                <table>
+                    <tr>
+                        <td class="label">Respuestas Correctas:</td>
+                        <td class="value">{{ respuestas_correctas }} de {{ total_preguntas }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Puntos por Reactivo:</td>
+                        <td class="value">{{ puntos_reactivo }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Puntaje Obtenido:</td>
+                        <td class="value"><strong>{{ "%.2f"|format(puntaje) }} / {{ "%.2f"|format(puntaje_maximo) }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="label">Porcentaje para Aprobar:</td>
+                        <td class="value">{{ "%.2f"|format(porcentaje_aprobacion) }}%</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Tu Porcentaje:</td>
+                        <td class="value"><strong>{{ "%.2f"|format(puntaje_porcentual) }}%</strong></td>
+                    </tr>
+                </table>
+            </div>
         </div>
 
-        <hr>
         <h2>Revisión de Respuestas</h2>
-
         {% for res in resultados %}
             <div class="revision-pregunta">
                 <p class="pregunta-texto">{{ loop.index }}. {{ res.pregunta }}</p>
-                
                 <div class="opciones">
                     <p>Tu respuesta: 
                         {% if res.es_correcta %}
-                            <span class="respuesta-correcta">{{ res.opciones[res.respuesta_enviada] }} (Correcta)</span>
+                            <!-- ========= INICIO DE LA MEJORA ========= -->
+                            <span class="respuesta-correcta">✔ {{ res.opciones[res.respuesta_enviada] }} (Correcta) (+{{ puntos_reactivo }} puntos)</span>
+                            <!-- ========= FIN DE LA MEJORA ========= -->
                         {% else %}
-                            <span class="respuesta-incorrecta">{{ res.opciones[res.respuesta_enviada] }} (Incorrecta)</span>
+                            <!-- ========= INICIO DE LA MEJORA ========= -->
+                            <span class="respuesta-incorrecta">✖ {{ res.opciones[res.respuesta_enviada] if res.respuesta_enviada else "No contestada" }} (Incorrecta) (0 puntos)</span>
+                            <!-- ========= FIN DE LA MEJORA ========= -->
                         {% endif %}
                     </p>
                     <p>Respuesta correcta: <span class="respuesta-correcta">{{ res.respuesta_correcta_texto }}</span></p>
                 </div>
-                
-                {% if not res.es_correcta %}
+                {% if not res.es_correcta and res.explicacion %}
                     <div class="explicacion">
                         <strong>Explicación:</strong> {{ res.explicacion }}
                     </div>
                 {% endif %}
             </div>
         {% endfor %}
-
         <a href="/" class="btn-inicio">Volver al Inicio</a>
     </div>
 </body>

@@ -9,7 +9,9 @@
         .container { max-width: 800px; margin: 20px auto; background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         h1 { text-align: center; color: #0056b3; }
         .pregunta-bloque { margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
-        .pregunta-texto { font-size: 1.2em; font-weight: bold; margin-bottom: 15px; }
+        .pregunta-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .pregunta-texto { font-size: 1.2em; font-weight: bold; flex-grow: 1; }
+        .valor-puntos { font-size: 0.9em; font-weight: bold; color: #007bff; background-color: #eef7ff; padding: 5px 10px; border-radius: 15px; white-space: nowrap; }
         .pregunta-imagen { max-width: 300px; display: block; margin: 15px auto; border-radius: 5px; }
         .opciones label { display: block; background-color: #f8f9fa; padding: 15px; margin-bottom: 10px; border-radius: 5px; cursor: pointer; border: 1px solid #ddd; transition: background-color 0.2s; }
         .opciones label:hover { background-color: #e2e6ea; }
@@ -23,24 +25,23 @@
         <h1>🚗 Modo {{ tipo_examen }} 🏁</h1>
         
         <form id="examen-form" action="/resultado" method="POST">
-            <!-- Campo oculto para enviar el tipo de examen al backend -->
             <input type="hidden" name="tipo_examen" value="{{ tipo_examen }}">
             
-            <!-- ========= INICIO DEL CÓDIGO CORREGIDO ========= -->
-            
-            <!-- Bucle para iterar sobre cada pregunta enviada desde Flask -->
             {% for pregunta in preguntas %}
             <div class="pregunta-bloque">
-                <!-- Muestra el número y el texto de la pregunta -->
-                <p class="pregunta-texto">{{ loop.index }}. {{ pregunta.pregunta }}</p>
                 
-                <!-- Si la pregunta tiene una imagen, la muestra -->
+                <!-- ========= INICIO DE LA MEJORA ========= -->
+                <div class="pregunta-header">
+                    <p class="pregunta-texto">{{ loop.index }}. {{ pregunta.pregunta }}</p>
+                    <span class="valor-puntos">Valor: {{ puntos_por_pregunta }} puntos</span>
+                </div>
+                <!-- ========= FIN DE LA MEJORA ========= -->
+
                 {% if pregunta.imagen %}
                     <img src="{{ url_for('static', filename='images/' + pregunta.imagen) }}" alt="Imagen de la pregunta" class="pregunta-imagen">
                 {% endif %}
                 
                 <div class="opciones">
-                    <!-- Bucle para mostrar cada una de las opciones de la pregunta -->
                     {% for key, value in pregunta.opciones.items() %}
                     <label>
                         <input type="radio" name="pregunta-{{ pregunta.id }}" value="{{ key }}" required>
@@ -50,8 +51,6 @@
                 </div>
             </div>
             {% endfor %}
-
-            <!-- ========= FIN DEL CÓDIGO CORREGIDO ========= -->
 
             <button type="submit" class="submit-btn">Finalizar y Calificar</button>
         </form>

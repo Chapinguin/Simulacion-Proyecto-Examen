@@ -16,7 +16,9 @@
 <body>
     <div class="container">
         <div class="user-info">
-            Bienvenido, <strong>{{ session.username }}</strong> | <a href="/logout">Cerrar Sesión</a>
+            Bienvenido, <strong>{{ session.username }}</strong> | 
+            <a href="/dashboard">Ver Dashboard</a> | 
+            <a href="/logout">Cerrar Sesión</a>
         </div>
         <h1>🚗 Simulador de Examen Teórico de Manejo 🏁</h1>
         <p>Intentos de Práctica Realizados: {{ intentos.practica }} / 6</p>
