@@ -25,7 +25,7 @@
         .btn-inicio:hover { background-color: #0056b3; }
     </style>
 </head>
-<!-- En templates/resultado.html -->
+<!-- EN templates/resultado.html -->
 <body>
     <div class="container">
         <div class="resultado-header">
@@ -38,26 +38,11 @@
             <div class="puntaje-summary">
                 <h3>Resumen de Calificación ({{ tipo_examen }})</h3>
                 <table>
-                    <tr>
-                        <td class="label">Respuestas Correctas:</td>
-                        <td class="value">{{ respuestas_correctas }} de {{ total_preguntas }}</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Puntos por Reactivo:</td>
-                        <td class="value">{{ puntos_reactivo }}</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Puntaje Obtenido:</td>
-                        <td class="value"><strong>{{ "%.2f"|format(puntaje) }} / {{ "%.2f"|format(puntaje_maximo) }}</strong></td>
-                    </tr>
-                    <tr>
-                        <td class="label">Porcentaje para Aprobar:</td>
-                        <td class="value">{{ "%.2f"|format(porcentaje_aprobacion) }}%</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Tu Porcentaje:</td>
-                        <td class="value"><strong>{{ "%.2f"|format(puntaje_porcentual) }}%</strong></td>
-                    </tr>
+                    <tr><td class="label">Respuestas Correctas:</td><td class="value">{{ respuestas_correctas }} de {{ total_preguntas }}</td></tr>
+                    <tr><td class="label">Puntos por Reactivo:</td><td class="value">{{ puntos_reactivo }}</td></tr>
+                    <tr><td class="label">Puntaje Obtenido:</td><td class="value"><strong>{{ "%.2f"|format(puntaje) }} / {{ "%.2f"|format(puntaje_maximo) }}</strong></td></tr>
+                    <tr><td class="label">Porcentaje para Aprobar:</td><td class="value">{{ "%.2f"|format(porcentaje_aprobacion) }}%</td></tr>
+                    <tr><td class="label">Tu Porcentaje:</td><td class="value"><strong>{{ "%.2f"|format(puntaje_porcentual) }}%</strong></td></tr>
                 </table>
             </div>
         </div>
@@ -69,13 +54,9 @@
                 <div class="opciones">
                     <p>Tu respuesta: 
                         {% if res.es_correcta %}
-                            <!-- ========= INICIO DE LA MEJORA ========= -->
-                            <span class="respuesta-correcta">✔ {{ res.opciones[res.respuesta_enviada] }} (Correcta) (+{{ puntos_reactivo }} puntos)</span>
-                            <!-- ========= FIN DE LA MEJORA ========= -->
+                            <span class="respuesta-correcta">✔ {{ res.respuesta_enviada_texto }} (Correcta) (+{{ puntos_reactivo }} puntos)</span>
                         {% else %}
-                            <!-- ========= INICIO DE LA MEJORA ========= -->
-                            <span class="respuesta-incorrecta">✖ {{ res.opciones[res.respuesta_enviada] if res.respuesta_enviada else "No contestada" }} (Incorrecta) (0 puntos)</span>
-                            <!-- ========= FIN DE LA MEJORA ========= -->
+                            <span class="respuesta-incorrecta">✖ {{ res.respuesta_enviada_texto }} (Incorrecta) (0 puntos)</span>
                         {% endif %}
                     </p>
                     <p>Respuesta correcta: <span class="respuesta-correcta">{{ res.respuesta_correcta_texto }}</span></p>

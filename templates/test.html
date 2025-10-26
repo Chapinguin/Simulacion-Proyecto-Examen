@@ -30,25 +30,30 @@
             <input type="hidden" name="tipo_examen" value="{{ tipo_examen }}">
             
             <!-- Iteramos sobre las preguntas para generarlas en el HTML, pero ocultas -->
-            {% for pregunta in preguntas %}
-            <div class="pregunta-bloque" id="bloque-{{ loop.index0 }}">
-                <div class="pregunta-header">
-                    <p class="pregunta-texto">{{ loop.index }}. {{ pregunta.pregunta }}</p>
-                    <span class="valor-puntos">Valor: {{ puntos_por_pregunta }} puntos</span>
-                </div>
-                {% if pregunta.imagen %}
-                    <img src="{{ url_for('static', filename='images/' + pregunta.imagen) }}" alt="Imagen de la pregunta" class="pregunta-imagen">
-                {% endif %}
-                <div class="opciones">
-                    {% for key, value in pregunta.opciones.items() %}
-                    <label>
-                        <input type="radio" name="pregunta-{{ pregunta.id }}" value="{{ key }}">
-                        {{ value }}
-                    </label>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endfor %}
+{% for pregunta in preguntas %}
+<div class="pregunta-bloque" id="bloque-{{ loop.index0 }}">
+    <div class="pregunta-header">
+        <!-- Accedemos a los atributos del objeto con '.' -->
+        <p class="pregunta-texto">{{ loop.index }}. {{ pregunta.texto_pregunta }}</p>
+        <span class="valor-puntos">Valor: {{ puntos_por_pregunta }} puntos</span>
+    </div>
+    
+    {% if pregunta.imagen_path %}
+        <img src="{{ url_for('static', filename=pregunta.imagen_path) }}" alt="Imagen de la pregunta" class="pregunta-imagen">
+    {% endif %}
+    
+    <div class="opciones">
+        <!-- Iteramos sobre la relación 'opciones' del objeto pregunta -->
+        {% for opcion in pregunta.opciones %}
+        <label>
+            <!-- El valor ahora es el ID de la opción, que es único -->
+            <input type="radio" name="pregunta-{{ pregunta.id }}" value="{{ opcion.id }}" required>
+            {{ opcion.texto_opcion }}
+        </label>
+        {% endfor %}
+    </div>
+</div>
+{% endfor %}
         </form>
 
         <!-- Controles de navegación y temporizador -->

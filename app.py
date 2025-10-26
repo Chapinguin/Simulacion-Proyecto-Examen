@@ -1,16 +1,26 @@
-from flask import Flask, render_template, jsonify, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, flash
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import func
 import json
 import random
+from datetime import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
 import io
 import base64
 
+# ==============================================================================
+# --- CONFIGURACIÓN DE LA APLICACIÓN Y BASE DE DATOS ---
+# ==============================================================================
 app = Flask(__name__)
-app.secret_key = 'clave_super_secreta_para_el_examen' # Clave para las sesiones
+app.secret_key = 'tu_clave_secreta_aqui_super_segura'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///simulador.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
 # ==============================================================================
-# --- CONFIGURACIÓN DE REQUISITOS DE EVALUACIÓN ---
+# --- PARÁMETROS DE EVALUACIÓN ---
 # ==============================================================================
 PUNTOS_PRACTICA = 5.0
 PUNTOS_FINAL = 2.5
@@ -19,71 +29,136 @@ NUM_PREGUNTAS_PRACTICA = 20
 NUM_PREGUNTAS_FINAL = 40
 LIMITE_INTENTOS_PRACTICA = 6
 LIMITE_INTENTOS_FINAL = 3
+
 # ==============================================================================
+# --- MODELOS DE LA BASE DE DATOS ---
+# ==============================================================================
+class Usuario(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(80), nullable=False)
+    apellido = db.Column(db.String(80), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
+    fecha_nacimiento = db.Column(db.Date, nullable=False)
+    es_admin = db.Column(db.Boolean, default=False)
+    intentos = db.relationship('Intento', backref='usuario', lazy=True)
 
-# --- Base de Datos Simulada (en memoria) ---
-if 'usuarios' not in globals():
-    usuarios = {"sebastian": "123", "gustavo": "456"}
-if 'intentos_db' not in globals():
-    intentos_db = {}
+class Pregunta(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    texto_pregunta = db.Column(db.Text, nullable=False)
+    imagen_path = db.Column(db.String(100))
+    explicacion = db.Column(db.Text)
+    opciones = db.relationship('Opcion', backref='pregunta', lazy=True, cascade="all, delete-orphan")
 
-def cargar_preguntas():
-    try:
-        with open('preguntas.json', 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return []
+class Opcion(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    pregunta_id = db.Column(db.Integer, db.ForeignKey('pregunta.id'), nullable=False)
+    texto_opcion = db.Column(db.String(200), nullable=False)
+    es_correcta = db.Column(db.Boolean, default=False, nullable=False)
 
-banco_preguntas = cargar_preguntas()
-print(f"Se han cargado {len(banco_preguntas)} preguntas del banco.")
+class Intento(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
+    tipo_examen = db.Column(db.String(50), nullable=False)
+    fecha = db.Column(db.DateTime, default=datetime.utcnow)
+    puntaje_pct = db.Column(db.Float, nullable=False)
+    aprobado = db.Column(db.Boolean, nullable=False)
 
-# --- Rutas de Autenticación y Usuarios ---
+# ==============================================================================
+# --- RUTAS DE AUTENTICACIÓN ---
+# ==============================================================================
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        apellido = request.form['apellido']
+        email = request.form['email']
+        password = request.form['password']
+        fecha_nacimiento_str = request.form['fecha_nacimiento']
+        
+        if not all([nombre, apellido, email, password, fecha_nacimiento_str]):
+            flash("Todos los campos son obligatorios.", "danger")
+            return redirect(url_for('signup'))
+            
+        fecha_nacimiento = datetime.strptime(fecha_nacimiento_str, '%Y-%m-%d').date()
+        edad = (datetime.now().date() - fecha_nacimiento).days / 365.25
+        if edad < 15.5:
+            flash("Debes tener al menos 15 años y medio para registrarte.", "danger")
+            return redirect(url_for('signup'))
+
+        if Usuario.query.filter_by(email=email).first():
+            flash("El correo electrónico ya está registrado.", "warning")
+            return redirect(url_for('signup'))
+
+        password_hash = generate_password_hash(password)
+        
+        nuevo_usuario = Usuario(nombre=nombre, apellido=apellido, email=email, 
+                                password_hash=password_hash, fecha_nacimiento=fecha_nacimiento)
+        
+        db.session.add(nuevo_usuario)
+        db.session.commit()
+        
+        flash("¡Registro exitoso! Ahora puedes iniciar sesión.", "success")
+        return redirect(url_for('login'))
+        
+    return render_template('signup.html')
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
+        email = request.form['email']
         password = request.form['password']
-        if username in usuarios and usuarios[username] == password:
-            session['username'] = username
-            if username not in intentos_db:
-                intentos_db[username] = []
+        folio_pago = request.form['folio_pago']
+        
+        if folio_pago != "001":
+            flash("Folio de pago inválido.", "danger")
+            return redirect(url_for('login'))
+            
+        usuario = Usuario.query.filter_by(email=email).first()
+        
+        if usuario and check_password_hash(usuario.password_hash, password):
+            session['user_id'] = usuario.id
+            session['username'] = usuario.nombre
+            flash(f"Bienvenido de nuevo, {usuario.nombre}!", "success")
             return redirect(url_for('pagina_inicio'))
         else:
-            return "Usuario o contraseña incorrectos", 401
+            flash("Correo o contraseña incorrectos.", "danger")
+    
     return render_template('login.html')
 
 @app.route('/logout')
 def logout():
-    session.pop('username', None)
+    session.clear()
+    flash("Has cerrado sesión exitosamente.", "info")
     return redirect(url_for('login'))
 
-# --- Rutas de la Aplicación ---
+
+# ==============================================================================
+# --- RUTAS PRINCIPALES DE LA APLICACIÓN ---
+# ==============================================================================
 @app.route('/')
 def pagina_inicio():
-    if 'username' not in session: return redirect(url_for('login'))
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
     
-    username = session['username']
-    intentos_usuario = intentos_db.get(username, [])
-    num_practica = sum(1 for i in intentos_usuario if i['tipo'] == 'Práctica')
-    num_final = sum(1 for i in intentos_usuario if i['tipo'] == 'Examen Final')
+    intentos_practica = Intento.query.filter_by(usuario_id=session['user_id'], tipo_examen='Práctica').count()
+    intentos_final = Intento.query.filter_by(usuario_id=session['user_id'], tipo_examen='Examen Final').count()
     
     return render_template('index.html', 
-                        intentos={'practica': num_practica, 'final': num_final},
+                        intentos={'practica': intentos_practica, 'final': intentos_final},
                         limites={'practica': LIMITE_INTENTOS_PRACTICA, 'final': LIMITE_INTENTOS_FINAL})
-
 
 @app.route('/practica')
 def modo_practica():
-    if 'username' not in session: return redirect(url_for('login'))
+    if 'user_id' not in session: return redirect(url_for('login'))
     
-    username = session['username']
-    num_practica = sum(1 for i in intentos_db.get(username, []) if i['tipo'] == 'Práctica')
-    if num_practica >= LIMITE_INTENTOS_PRACTICA:
+    intentos_usuario = Intento.query.filter_by(usuario_id=session['user_id'], tipo_examen='Práctica').count()
+    if intentos_usuario >= LIMITE_INTENTOS_PRACTICA:
         return f"Has alcanzado el límite de {LIMITE_INTENTOS_PRACTICA} intentos de práctica. <a href='/'>Volver</a>"
 
-    preguntas_seleccionadas = random.sample(banco_preguntas, NUM_PREGUNTAS_PRACTICA)
+    preguntas_seleccionadas = db.session.query(Pregunta).order_by(func.random()).limit(NUM_PREGUNTAS_PRACTICA).all()
     
-    # --- CAMBIO AQUÍ: Añadimos los puntos por pregunta ---
     return render_template('test.html', 
                         preguntas=preguntas_seleccionadas, 
                         tipo_examen="Práctica", 
@@ -91,59 +166,84 @@ def modo_practica():
 
 @app.route('/examen')
 def modo_examen():
-    if 'username' not in session: return redirect(url_for('login'))
+    if 'user_id' not in session: return redirect(url_for('login'))
 
-    username = session['username']
-    num_final = sum(1 for i in intentos_db.get(username, []) if i['tipo'] == 'Examen Final')
-    if num_final >= LIMITE_INTENTOS_FINAL:
+    intentos_usuario = Intento.query.filter_by(usuario_id=session['user_id'], tipo_examen='Examen Final').count()
+    if intentos_usuario >= LIMITE_INTENTOS_FINAL:
         return f"Has alcanzado el límite de {LIMITE_INTENTOS_FINAL} intentos para el examen final. <a href='/'>Volver</a>"
         
-    preguntas_seleccionadas = random.sample(banco_preguntas, NUM_PREGUNTAS_FINAL)
+    preguntas_seleccionadas = db.session.query(Pregunta).order_by(func.random()).limit(NUM_PREGUNTAS_FINAL).all()
     
-    # --- CAMBIO AQUÍ: Añadimos los puntos por pregunta ---
     return render_template('test.html', 
                         preguntas=preguntas_seleccionadas, 
                         tipo_examen="Examen Final",
                         puntos_por_pregunta=PUNTOS_FINAL)
 
+# EN app.py (Reemplazar la función procesar_resultado)
+
 @app.route('/resultado', methods=['POST'])
 def procesar_resultado():
-    if 'username' not in session: return redirect(url_for('login'))
+    if 'user_id' not in session: 
+        return redirect(url_for('login'))
 
     respuestas_usuario = request.form
     tipo_examen = request.form.get('tipo_examen')
-    username = session['username']
+    user_id = session['user_id']
 
-    if username not in intentos_db:
-        intentos_db[username] = []
-        
+    if user_id not in [u.id for u in Usuario.query.all()]:
+        flash("Error de sesión, por favor inicie sesión de nuevo.", "danger")
+        return redirect(url_for('login'))
+
     respuestas_correctas = 0
-    total_preguntas_enviadas = 0
     resultados_detallados = []
+
+    # Obtenemos los IDs de las preguntas que estaban en el examen
+    preguntas_ids_en_examen = [int(key.split('-')[1]) for key in respuestas_usuario if key.startswith('pregunta-')]
     
-    preguntas_ids_en_examen = [key.split('-')[1] for key in respuestas_usuario if key.startswith('pregunta-')]
+    # Consultamos esas preguntas y sus opciones de una sola vez para ser eficientes
+    preguntas_del_examen = db.session.query(Pregunta).filter(Pregunta.id.in_(preguntas_ids_en_examen)).all()
 
-    for pregunta in banco_preguntas:
-        if str(pregunta['id']) in preguntas_ids_en_examen:
-            total_preguntas_enviadas += 1
-            pregunta_id_str = f"pregunta-{pregunta['id']}"
-            respuesta_enviada = respuestas_usuario.get(pregunta_id_str)
-            es_correcta = (respuesta_enviada == pregunta['respuesta_correcta'])
-            if es_correcta: respuestas_correctas += 1
-            
-            resultados_detallados.append({
-                'pregunta': pregunta['pregunta'], 'opciones': pregunta['opciones'],
-                'respuesta_enviada': respuesta_enviada, 'letra_correcta': pregunta['respuesta_correcta'],
-                'respuesta_correcta_texto': pregunta['opciones'].get(pregunta['respuesta_correcta']),
-                'es_correcta': es_correcta, 'explicacion': pregunta.get('explicacion', '')
-            })
+    total_preguntas_en_examen = len(preguntas_del_examen)
 
+    for pregunta in preguntas_del_examen:
+        pregunta_id_str = f"pregunta-{pregunta.id}"
+        opcion_elegida_id = respuestas_usuario.get(pregunta_id_str)
+        
+        opcion_correcta_obj = None
+        opcion_elegida_obj = None
+        es_correcta = False
+
+        # Encontrar la opción correcta y la elegida por el usuario dentro de las opciones de la pregunta
+        for opcion in pregunta.opciones:
+            if opcion.es_correcta:
+                opcion_correcta_obj = opcion
+            if opcion_elegida_id and int(opcion_elegida_id) == opcion.id:
+                opcion_elegida_obj = opcion
+        
+        # Verificar si la opción elegida es la correcta
+        if opcion_elegida_obj and opcion_elegida_obj.es_correcta:
+            respuestas_correctas += 1
+            es_correcta = True
+        
+        # Creamos un diccionario de opciones para pasarlo a la plantilla
+        opciones_dict = {str(op.id): op.texto_opcion for op in pregunta.opciones}
+        
+        resultados_detallados.append({
+            'pregunta': pregunta.texto_pregunta,
+            'opciones': opciones_dict,
+            'respuesta_enviada_texto': opcion_elegida_obj.texto_opcion if opcion_elegida_obj else "No contestada",
+            'respuesta_correcta_texto': opcion_correcta_obj.texto_opcion if opcion_correcta_obj else "N/A",
+            'es_correcta': es_correcta,
+            'explicacion': pregunta.explicacion
+        })
+
+    # --- Lógica de Calificación (basada en los parámetros globales) ---
     if tipo_examen == "Práctica":
         puntos_por_reactivo = PUNTOS_PRACTICA
-        puntaje_maximo = total_preguntas_enviadas * PUNTOS_PRACTICA
+        puntaje_maximo = total_preguntas_en_examen * PUNTOS_PRACTICA
     elif tipo_examen == "Examen Final":
         puntos_por_reactivo = PUNTOS_FINAL
-        puntaje_maximo = total_preguntas_enviadas * PUNTOS_FINAL
+        puntaje_maximo = total_preguntas_en_examen * PUNTOS_FINAL
     else:
         return "Tipo de examen no reconocido", 400
 
@@ -151,57 +251,77 @@ def procesar_resultado():
     puntaje_porcentual = (puntaje / puntaje_maximo) * 100 if puntaje_maximo > 0 else 0
     aprobado = puntaje_porcentual >= PORCENTAJE_APROBACION
     
-    intentos_db[username].append({'tipo': tipo_examen, 'puntaje_pct': puntaje_porcentual, 'aprobado': aprobado})
+    # --- Guardar el Intento en la Base de Datos ---
+    nuevo_intento = Intento(
+        usuario_id=user_id,
+        tipo_examen=tipo_examen,
+        puntaje_pct=puntaje_porcentual,
+        aprobado=aprobado
+    )
+    db.session.add(nuevo_intento)
+    db.session.commit()
+    
+    flash(f"Tu {tipo_examen} ha sido calificado.", "info")
     
     return render_template('resultado.html', 
-                           puntaje=puntaje, puntaje_maximo=puntaje_maximo,
-                           puntaje_porcentual=puntaje_porcentual, aprobado=aprobado,
-                           resultados=resultados_detallados, tipo_examen=tipo_examen,
-                           respuestas_correctas=respuestas_correctas,
-                           total_preguntas=total_preguntas_enviadas,
-                           puntos_reactivo=puntos_por_reactivo,
-                           porcentaje_aprobacion=PORCENTAJE_APROBACION)
+                        puntaje=puntaje,
+                        puntaje_maximo=puntaje_maximo,
+                        puntaje_porcentual=puntaje_porcentual,
+                        aprobado=aprobado,
+                        resultados=resultados_detallados,
+                        tipo_examen=tipo_examen,
+                        respuestas_correctas=respuestas_correctas,
+                        total_preguntas=total_preguntas_en_examen,
+                        puntos_reactivo=puntos_por_reactivo,
+                        porcentaje_aprobacion=PORCENTAJE_APROBACION)
 
-# --- RUTA DEL DASHBOARD REFINADA ---
+
+# EN app.py (Reemplazar la función dashboard)
+
+# EN app.py (Reemplazar la función dashboard)
+
 @app.route('/dashboard')
 def dashboard():
-    if 'username' not in session:
+    if 'user_id' not in session:
         return redirect(url_for('login'))
 
-    datos_intentos = []
-    for user, attempts in intentos_db.items():
-        for attempt in attempts:
-            datos_intentos.append({
-                'usuario': user,
-                'tipo_examen': attempt['tipo'],
-                'puntaje': attempt['puntaje_pct'],
-                'aprobado': attempt['aprobado']
-            })
+    # --- NUEVA LÓGICA: Consultar la base de datos ---
+    # Obtenemos todos los intentos de todos los usuarios
+    todos_los_intentos = Intento.query.all()
     
-    if not datos_intentos:
+    # Si no hay ningún intento en la base de datos, mostramos el dashboard vacío
+    if not todos_los_intentos:
         return render_template('dashboard.html', grafico_practica_url=None, grafico_final_url=None)
 
-    df = pd.DataFrame(datos_intentos)
-    
+    # Convertimos la lista de objetos Intento a un DataFrame de Pandas para un análisis fácil
+    datos_df = pd.DataFrame([{
+        'usuario_id': i.usuario_id,
+        'tipo_examen': i.tipo_examen,
+        'puntaje': i.puntaje_pct,
+        'aprobado': i.aprobado
+    } for i in todos_los_intentos])
+
     # --- GRÁFICO 1: ANÁLISIS DE EXÁMENES DE PRÁCTICA ---
-    df_practica = df[df['tipo_examen'] == 'Práctica'].copy()
+    df_practica = datos_df[datos_df['tipo_examen'] == 'Práctica'].copy()
     grafico_practica_url = None
     if not df_practica.empty:
-        # Calcular el puntaje promedio por cada intento de práctica
-        df_practica['num_intento'] = df_practica.groupby('usuario').cumcount() + 1
+        # Calcular el puntaje promedio por cada número de intento (1er intento, 2do, etc.)
+        df_practica['num_intento'] = df_practica.groupby('usuario_id').cumcount() + 1
         progreso_practica = df_practica.groupby('num_intento')['puntaje'].mean().reset_index()
 
         fig1, ax1 = plt.subplots(figsize=(10, 6))
         ax1.plot(progreso_practica['num_intento'], progreso_practica['puntaje'], marker='o', linestyle='-', color='royalblue', label='Puntaje Promedio')
-        ax1.axhline(y=75, color='red', linestyle='--', label='Umbral de Aprobación (75%)')
+        ax1.axhline(y=PORCENTAJE_APROBACION, color='red', linestyle='--', label=f'Umbral de Aprobación ({PORCENTAJE_APROBACION}%)')
         ax1.set_title('Progreso del Puntaje Promedio en Exámenes de Práctica', fontsize=16)
         ax1.set_xlabel('Número de Intento de Práctica', fontsize=12)
         ax1.set_ylabel('Puntaje Promedio (%)', fontsize=12)
-        ax1.set_ylim(0, 100)
-        ax1.set_xticks(range(1, progreso_practica['num_intento'].max() + 1))
+        ax1.set_ylim(0, 105)
+        # Aseguramos que el eje X muestre todos los intentos posibles
+        ax1.set_xticks(range(1, max(progreso_practica['num_intento'].max(), LIMITE_INTENTOS_PRACTICA) + 1))
         ax1.grid(axis='y', linestyle='--')
         ax1.legend()
         
+        # Convertir el gráfico a imagen para el HTML
         buf1 = io.BytesIO()
         fig1.savefig(buf1, format='png')
         buf1.seek(0)
@@ -209,14 +329,15 @@ def dashboard():
         plt.close(fig1)
 
     # --- GRÁFICO 2: ANÁLISIS DE EXÁMENES FINALES ---
-    df_final = df[df['tipo_examen'] == 'Examen Final'].copy()
+    df_final = datos_df[datos_df['tipo_examen'] == 'Examen Final'].copy()
     grafico_final_url = None
-    if not df_final.empty:
+    if not df_final.empty and not df_practica.empty: # Necesitamos ambos tipos de datos
         practicas_antes_del_final = []
-        for user in df_final['usuario'].unique():
-            num_practicas = df_practica[df_practica['usuario'] == user].shape[0]
-            primer_final_aprobado = df_final[df_final['usuario'] == user].iloc[0]['aprobado']
-            practicas_antes_del_final.append({'num_practicas': num_practicas, 'aprobado_final': primer_final_aprobado})
+        for user_id in df_final['usuario_id'].unique():
+            num_practicas = df_practica[df_practica['usuario_id'] == user_id].shape[0]
+            # Tomamos el resultado del primer examen final de este usuario
+            primer_final = df_final[df_final['usuario_id'] == user_id].iloc[0]
+            practicas_antes_del_final.append({'num_practicas': num_practicas, 'aprobado_final': primer_final['aprobado']})
         
         if practicas_antes_del_final:
             df_correlacion = pd.DataFrame(practicas_antes_del_final)
@@ -224,13 +345,13 @@ def dashboard():
             tasa_aprobacion['aprobado_final'] *= 100
 
             fig2, ax2 = plt.subplots(figsize=(10, 6))
-            ax2.bar(tasa_aprobacion['num_practicas'], tasa_aprobacion['aprobado_final'], color='coral')
+            ax2.bar(tasa_aprobacion['num_practicas'], tasa_aprobacion['aprobado_final'], color='coral', zorder=3)
             ax2.set_title('Impacto de la Práctica en la Tasa de Aprobación del Examen Final', fontsize=16)
             ax2.set_xlabel('Número de Prácticas Realizadas Antes del Examen Final', fontsize=12)
             ax2.set_ylabel('Tasa de Aprobación (%)', fontsize=12)
-            ax2.set_ylim(0, 100)
-            max_practicas = int(tasa_aprobacion['num_practicas'].max()) if not tasa_aprobacion.empty else 0
-            ax2.set_xticks(range(max_practicas + 2))
+            ax2.set_ylim(0, 105)
+            max_practicas_db = int(tasa_aprobacion['num_practicas'].max()) if not tasa_aprobacion.empty else 0
+            ax2.set_xticks(range(max_practicas_db + 2))
             ax2.grid(axis='y', linestyle='--')
             
             buf2 = io.BytesIO()
@@ -243,5 +364,11 @@ def dashboard():
                         grafico_practica_url=grafico_practica_url, 
                         grafico_final_url=grafico_final_url)
 
+# ==============================================================================
+# --- PUNTO DE ENTRADA ---
+# ==============================================================================
 if __name__ == '__main__':
+    # Este bloque asegura que las tablas se creen si el archivo .db no existe
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
