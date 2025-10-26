@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Examen - Modo {{ tipo_examen }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f0f2f5; color: #333; }
+        .container { max-width: 800px; margin: 20px auto; background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #0056b3; }
+        .pregunta-bloque { margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+        .pregunta-texto { font-size: 1.2em; font-weight: bold; margin-bottom: 15px; }
+        .pregunta-imagen { max-width: 300px; display: block; margin: 15px 0; }
+        .opciones label { display: block; background-color: #f8f9fa; padding: 15px; margin-bottom: 10px; border-radius: 5px; cursor: pointer; border: 1px solid #ddd; }
+        .opciones label:hover { background-color: #e2e6ea; }
+        .opciones input { margin-right: 10px; }
+        .submit-btn { display: block; width: 100%; padding: 15px; font-size: 18px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚗 Modo {{ tipo_examen }} 🏁</h1>
+        
+        <!-- El formulario enviará las respuestas a una ruta /resultado que crearemos después -->
+        <form action="/resultado" method="POST">
+            
+            <!-- Usamos un bucle de Jinja2 para mostrar cada pregunta -->
+            {% for pregunta in preguntas %}
+            <div class="pregunta-bloque">
+                <p class="pregunta-texto">{{ loop.index }}. {{ pregunta.pregunta }}</p>
+                
+                <!-- Si la pregunta tiene una imagen, la mostramos -->
+                {% if pregunta.imagen %}
+                    <img src="{{ url_for('static', filename='images/' + pregunta.imagen) }}" alt="Imagen de la pregunta" class="pregunta-imagen">
+                {% endif %}
+                
+                <div class="opciones">
+                    <!-- Iteramos sobre las opciones de cada pregunta -->
+                    {% for key, value in pregunta.opciones.items() %}
+                    <label>
+                        <input type="radio" name="pregunta-{{ pregunta.id }}" value="{{ key }}" required>
+                        {{ value }}
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="submit-btn">Finalizar y Calificar</button>
+        </form>
+    </div>
+</body>
+</html>

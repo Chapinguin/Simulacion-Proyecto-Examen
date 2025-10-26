@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado del Examen</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f0f2f5; color: #333; }
+        .container { max-width: 800px; margin: 20px auto; background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .resultado-header { text-align: center; margin-bottom: 30px; }
+        .aprobado { color: #28a745; font-size: 2.5em; font-weight: bold; }
+        .reprobado { color: #dc3545; font-size: 2.5em; font-weight: bold; }
+        .puntaje { font-size: 1.5em; color: #666; }
+        .revision-pregunta { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        .pregunta-texto { font-weight: bold; }
+        .opcion { margin-left: 20px; }
+        .respuesta-correcta { color: #28a745; font-weight: bold; }
+        .respuesta-incorrecta { color: #dc3545; font-weight: bold; }
+        .explicacion { background-color: #eef7ff; border-left: 4px solid #007bff; padding: 10px; margin-top: 10px; font-style: italic; }
+        .btn-inicio { display: block; width: 200px; margin: 30px auto; text-align: center; padding: 15px; font-size: 18px; background-color: #007bff; color: white; border: none; border-radius: 5px; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="resultado-header">
+            {% if aprobado %}
+                <h1 class="aprobado">¡Felicidades, has APROBADO!</h1>
+            {% else %}
+                <h1 class="reprobado">Lo sentimos, has REPROBADO.</h1>
+            {% endif %}
+            <p class="puntaje">Tu puntaje fue: <strong>{{ puntaje }} / {{ puntaje_maximo }}</strong> ({{ "%.2f"|format(puntaje_porcentual) }}%)</p>
+        </div>
+
+        <hr>
+        <h2>Revisión de Respuestas</h2>
+
+        {% for res in resultados %}
+            <div class="revision-pregunta">
+                <p class="pregunta-texto">{{ loop.index }}. {{ res.pregunta }}</p>
+                
+                <div class="opciones">
+                    <p>Tu respuesta: 
+                        {% if res.es_correcta %}
+                            <span class="respuesta-correcta">{{ res.opciones[res.respuesta_enviada] }} (Correcta)</span>
+                        {% else %}
+                            <span class="respuesta-incorrecta">{{ res.opciones[res.respuesta_enviada] }} (Incorrecta)</span>
+                        {% endif %}
+                    </p>
+                    <p>Respuesta correcta: <span class="respuesta-correcta">{{ res.respuesta_correcta_texto }}</span></p>
+                </div>
+                
+                {% if not res.es_correcta %}
+                    <div class="explicacion">
+                        <strong>Explicación:</strong> {{ res.explicacion }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <a href="/" class="btn-inicio">Volver al Inicio</a>
+    </div>
+</body>
+</html>
