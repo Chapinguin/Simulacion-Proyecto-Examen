@@ -8,7 +8,7 @@
       "c": "Camino sinuoso"
     },
     "respuesta_correcta": "b",
-    "imagen": "no_u_turn_sign.png",
+    "imagen": "images/q1-vuelta-u-prohibida.png",
     "explicacion": "Esta señal prohíbe explícitamente realizar una vuelta en U. Se encuentra en la página 42 del manual."
   },
   {
@@ -32,7 +32,7 @@
       "c": "Detenerse siempre completamente antes de entrar, incluso si no hay tráfico."
     },
     "respuesta_correcta": "a",
-    "imagen": "roundabout_example.png",
+    "imagen": "images/q3-rotonda.png",
     "explicacion": "La regla principal en una rotonda es reducir la velocidad y ceder el paso a los vehículos y ciclistas que ya están circulando dentro de ella. Se explica en la página 46 del manual."
   },
   {
@@ -44,7 +44,7 @@
       "c": "La carretera termina más adelante."
     },
     "respuesta_correcta": "b",
-    "imagen": null,
+    "imagen": "images/q4-linea-amarilla-discontinua.png",
     "explicacion": "Una línea amarilla discontinua indica que puede rebasar si la línea discontinua está de su lado de la carretera. Esto se encuentra en la página 19 del manual."
   },
   {
@@ -68,7 +68,7 @@
       "c": "Hacia el lado contrario de la acera."
     },
     "respuesta_correcta": "c",
-    "imagen": "parking_uphill_curb.png",
+    "imagen": "images/q6-estacionar-cuesta-arriba.png",
     "explicacion": "Al estacionar cuesta arriba, gire las ruedas delanteras hacia el lado contrario de la acera y deje que el vehículo ruede hacia atrás unas pulgadas hasta que la rueda toque suavemente la acera. Esto se detalla en la página 33 del manual."
   },
   {
@@ -80,7 +80,7 @@
       "c": "Esperar a que la luz se vuelva verde."
     },
     "respuesta_correcta": "b",
-    "imagen": null,
+    "imagen": "images/q7-luz-roja-intermitente.png",
     "explicacion": "Una luz roja intermitente significa DETENERSE. Después de detenerse, puede continuar cuando sea seguro. Se trata como una señal de alto (STOP). Esto se explica en la página 39 del manual."
   },
   {
@@ -116,7 +116,7 @@
       "c": "Si la carretera está despejada en ambas direcciones."
     },
     "respuesta_correcta": "b",
-    "imagen": null,
+    "imagen": "images/q10-doble-linea-amarilla-solida.png",
     "explicacion": "No debe cruzar líneas amarillas dobles y continuas, excepto para girar a la izquierda para entrar o salir de una entrada de vehículos o una carretera privada, o para hacer una vuelta en U. Esto se explica en la página 19 del manual."
   },
   {
@@ -152,7 +152,7 @@
       "c": "Hay una señal de alto más adelante."
     },
     "respuesta_correcta": "b",
-    "imagen": "school_zone_sign.png",
+    "imagen": "images/q13-zona-escolar.png",
     "explicacion": "Una señal de 5 lados con esta forma indica que está cerca de una escuela. Conduzca despacio y deténgase por los niños en el cruce de peatones. Esto se describe en la página 44 del manual."
   },
   {
@@ -164,7 +164,7 @@
       "c": "Hacerse a la derecha y detenerse."
     },
     "respuesta_correcta": "c",
-    "imagen": null,
+    "imagen": "images/q14-vehiculo-emergencia.png",
     "explicacion": "Debe ceder el paso a cualquier vehículo de emergencia. Conduzca hacia el borde derecho de la carretera y deténgase hasta que el vehículo de emergencia haya pasado. Esto se especifica en la página 51 del manual."
   },
   {
@@ -212,7 +212,7 @@
       "c": "No se puede estacionar en ningún momento."
     },
     "respuesta_correcta": "b",
-    "imagen": null,
+    "imagen": "images/q18-bordillo-azul.png",
     "explicacion": "Una acera pintada de azul indica estacionamiento para una persona discapacitada o alguien que conduce a una persona discapacitada con un cartel o placa especial. Esto se detalla en la página 34 del manual."
   },
   {
@@ -224,7 +224,7 @@
       "c": "Una técnica de ahorro de combustible al conducir cuesta abajo."
     },
     "respuesta_correcta": "a",
-    "imagen": null,
+    "imagen": "images/q19-hidroplaneo.png",
     "explicacion": "El hidroplaneo ocurre cuando un vehículo se desliza sobre el agua porque los neumáticos pierden todo contacto con la carretera. Para evitarlo, conduzca despacio en condiciones de lluvia. Esto se explica en la página 68 del manual."
   },
   {
@@ -272,7 +272,7 @@
       "c": "No gire a la derecha."
     },
     "respuesta_correcta": "b",
-    "imagen": "slower_traffic_keep_right_sign.png",
+    "imagen": null,
     "explicacion": "Esta señal indica que los vehículos que se mueven más lentamente deben permanecer en el carril derecho. Se muestra en la página 42 del manual."
   },
   {
@@ -284,7 +284,7 @@
       "c": "Conducir al menos 10 mph por encima del límite de velocidad."
     },
     "respuesta_correcta": "b",
-    "imagen": null,
+    "imagen": "images/q24-carril-hov.png",
     "explicacion": "Un carril HOV está reservado para vehículos compartidos, autobuses, motocicletas o vehículos de bajas emisiones con una calcomanía. Debe cumplir con los requisitos publicados. Esto se explica en las páginas 21-22 del manual."
   },
   {
@@ -308,7 +308,7 @@
       "c": "Es una zona de no estacionamiento."
     },
     "respuesta_correcta": "a",
-    "imagen": null,
+    "imagen": "images/q26-linea-blanca-solida.png",
     "explicacion": "Las líneas blancas continuas marcan los carriles de tráfico que van en la misma dirección, como las calles de un solo sentido, y también marcan el borde derecho de la carretera. Esto se menciona en la página 19 del manual, aunque se infiere de los usos de las líneas blancas."
   },
   {
@@ -380,7 +380,7 @@
       "c": "Hay un camino sinuoso más adelante."
     },
     "respuesta_correcta": "b",
-    "imagen": "merging_traffic_sign.png",
+    "imagen": null,
     "explicacion": "Esta señal advierte a los conductores que el tráfico de otra carretera se incorporará al suyo. Esté preparado para que los vehículos entren en su carril. La señal se muestra en la página 43 del manual."
   },
   {
@@ -428,7 +428,7 @@
       "c": "El punto en el que sus faros ya no iluminan la carretera."
     },
     "respuesta_correcta": "b",
-    "imagen": null,
+    "imagen": "images/q25-punto-ciego-camion.png",
     "explicacion": "Los puntos ciegos son áreas alrededor del vehículo que un conductor no puede ver al mirar de frente o usando los espejos. Debe girar la cabeza para revisar estas áreas. Esto se explica en la página 64 del manual."
   },
   {
@@ -500,7 +500,7 @@
       "c": "Advertencia de condiciones o peligros específicos en la carretera."
     },
     "respuesta_correcta": "c",
-    "imagen": "diamond_shape_warning_sign.png",
+    "imagen": "images/q42-senal-camino-sinuoso.png",
     "explicacion": "Una señal con forma de diamante es una señal de advertencia que le alerta sobre condiciones específicas de la carretera y peligros que se aproximan. Esto se describe en la página 44 del manual."
   },
   {
@@ -572,7 +572,7 @@
       "c": "Que el límite de velocidad va a cambiar."
     },
     "respuesta_correcta": "a",
-    "imagen": null,
+    "imagen": "images/q48-senal-fin-carril.png",
     "explicacion": "Los carriles de autopista que terminan suelen estar marcados con grandes líneas blancas discontinuas. Esté preparado para salir de la autopista o para que el carril termine. Esto se menciona en la página 20 del manual."
   },
   {
@@ -608,7 +608,7 @@
       "c": "Una zona escolar."
     },
     "respuesta_correcta": "b",
-    "imagen": "railroad_crossing_sign.png",
+    "imagen": "images/q51-cruce-ferrocarril.png",
     "explicacion": "Una señal circular amarilla y negra o una señal en forma de X indica que se está acercando a un cruce de ferrocarril. Mire, escuche, reduzca la velocidad y prepárese para detenerse. Esto se describe en la página 44 del manual."
   },
   {
@@ -728,7 +728,7 @@
       "c": "El comienzo de una zona de no rebasar."
     },
     "respuesta_correcta": "b",
-    "imagen": "yield_line.png",
+    "imagen": null,
     "explicacion": "Una línea de ceda el paso es una línea continua de triángulos blancos que muestra a los vehículos que se aproximan dónde ceder el paso o detenerse. Esto se describe en la página 20 del manual."
   },
   {
@@ -740,7 +740,7 @@
       "c": "Hacia el lado contrario de la acera."
     },
     "respuesta_correcta": "a",
-    "imagen": "parking_downhill_curb.png",
+    "imagen": null,
     "explicacion": "Al estacionar cuesta abajo, gire las ruedas delanteras hacia la acera o hacia el lado derecho de la carretera. Esto se detalla en la página 33 del manual."
   },
   {
@@ -752,7 +752,7 @@
       "c": "70 mph"
     },
     "respuesta_correcta": "b",
-    "imagen": null,
+    "imagen": "images/q63-limite-velocidad.png",
     "explicacion": "A menos que se indique lo contrario, el límite de velocidad máximo ideal en la mayoría de las autopistas de California es de 65 mph. Esto se especifica en la página 73 del manual."
   },
   {
@@ -848,7 +848,7 @@
       "c": "Cambiar a otro carril para rebasarlo de manera segura, dejando al menos tres pies de espacio."
     },
     "respuesta_correcta": "c",
-    "imagen": null,
+    "imagen": "images/q71-rebasar-bicicleta.png",
     "explicacion": "Para rebasar a un ciclista de manera segura, es posible que necesite cambiar a otro carril. Deje suficiente espacio entre su vehículo y el ciclista, al menos tres pies. Esto se explica en la página 54 del manual."
   },
   {
@@ -932,7 +932,7 @@
       "c": "Reducir la velocidad o detenerse."
     },
     "respuesta_correcta": "c",
-    "imagen": "hand_signal_slow_stop.png",
+    "imagen": "images/q78-senal-mano-detenerse.png",
     "explicacion": "La señal de mano para reducir la velocidad o detenerse es extender la mano y el brazo hacia abajo. Las señales de mano se muestran en la página 16 del manual."
   },
   {
