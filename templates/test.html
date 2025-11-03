@@ -69,7 +69,7 @@
                 </div>
 
                 {% if pregunta.imagen_path %}
-                    <img src="{{ url_for('static', filename=pregunta.imagen_path) }}" alt="Imagen de la pregunta" class="pregunta-imagen">
+                <img src="{{ url_for('static', filename=pregunta.imagen_path) }}" alt="Imagen de la pregunta" class="pregunta-imagen">
                 {% endif %}
 
                 <div class="opciones">
