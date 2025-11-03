@@ -180,7 +180,6 @@ def modo_examen():
                         puntos_por_pregunta=PUNTOS_FINAL)
 
 # EN app.py (Reemplazar la función procesar_resultado)
-
 @app.route('/resultado', methods=['POST'])
 def procesar_resultado():
     if 'user_id' not in session: 
@@ -190,47 +189,43 @@ def procesar_resultado():
     tipo_examen = request.form.get('tipo_examen')
     user_id = session['user_id']
 
-    if user_id not in [u.id for u in Usuario.query.all()]:
-        flash("Error de sesión, por favor inicie sesión de nuevo.", "danger")
-        return redirect(url_for('login'))
-
+    # --- INICIO DE LA NUEVA LÓGICA DE CALIFICACIÓN ---
+    
+    # Obtenemos la lista completa de IDs de las preguntas del examen
+    ids_str = request.form.get('todos_los_ids', '')
+    preguntas_ids_en_examen = [int(id_str) for id_str in ids_str.split(',') if id_str.strip()]
+    
+    total_preguntas_en_examen = len(preguntas_ids_en_examen)
     respuestas_correctas = 0
     resultados_detallados = []
 
-    # Obtenemos los IDs de las preguntas que estaban en el examen
-    preguntas_ids_en_examen = [int(key.split('-')[1]) for key in respuestas_usuario if key.startswith('pregunta-')]
-    
-    # Consultamos esas preguntas y sus opciones de una sola vez para ser eficientes
-    preguntas_del_examen = db.session.query(Pregunta).filter(Pregunta.id.in_(preguntas_ids_en_examen)).all()
+    # Iteramos directamente sobre los IDs de las preguntas que estaban en el examen
+    for pregunta_id in preguntas_ids_en_examen:
+        # Buscamos la pregunta en la base de datos
+        pregunta = db.session.query(Pregunta).get(pregunta_id)
+        if not pregunta:
+            continue # Si por alguna razón no se encuentra, la saltamos
 
-    total_preguntas_en_examen = len(preguntas_del_examen)
-
-    for pregunta in preguntas_del_examen:
-        pregunta_id_str = f"pregunta-{pregunta.id}"
-        opcion_elegida_id = respuestas_usuario.get(pregunta_id_str)
+        # Obtenemos la respuesta del usuario para esta pregunta
+        pregunta_id_form = f"pregunta-{pregunta_id}"
+        opcion_elegida_id_str = respuestas_usuario.get(pregunta_id_form) # Puede ser None
         
-        opcion_correcta_obj = None
-        opcion_elegida_obj = None
+        # Buscamos la opción correcta de la pregunta
+        opcion_correcta_obj = db.session.query(Opcion).filter_by(pregunta_id=pregunta_id, es_correcta=True).first()
+        
         es_correcta = False
-
-        # Encontrar la opción correcta y la elegida por el usuario dentro de las opciones de la pregunta
-        for opcion in pregunta.opciones:
-            if opcion.es_correcta:
-                opcion_correcta_obj = opcion
-            if opcion_elegida_id and int(opcion_elegida_id) == opcion.id:
-                opcion_elegida_obj = opcion
+        opcion_elegida_obj = None
         
-        # Verificar si la opción elegida es la correcta
-        if opcion_elegida_obj and opcion_elegida_obj.es_correcta:
-            respuestas_correctas += 1
-            es_correcta = True
+        if opcion_elegida_id_str:
+            opcion_elegida_obj = db.session.query(Opcion).get(int(opcion_elegida_id_str))
+            if opcion_elegida_obj and opcion_elegida_obj.es_correcta:
+                respuestas_correctas += 1
+                es_correcta = True
         
-        # Creamos un diccionario de opciones para pasarlo a la plantilla
-        opciones_dict = {str(op.id): op.texto_opcion for op in pregunta.opciones}
-        
+        # Preparamos los datos para la plantilla de resultados
         resultados_detallados.append({
             'pregunta': pregunta.texto_pregunta,
-            'opciones': opciones_dict,
+            'opciones': {str(op.id): op.texto_opcion for op in pregunta.opciones},
             'respuesta_enviada_texto': opcion_elegida_obj.texto_opcion if opcion_elegida_obj else "No contestada",
             'respuesta_correcta_texto': opcion_correcta_obj.texto_opcion if opcion_correcta_obj else "N/A",
             'es_correcta': es_correcta,
@@ -275,8 +270,6 @@ def procesar_resultado():
                         puntos_reactivo=puntos_por_reactivo,
                         porcentaje_aprobacion=PORCENTAJE_APROBACION)
 
-
-# EN app.py (Reemplazar la función dashboard)
 
 # EN app.py (Reemplazar la función dashboard)
 

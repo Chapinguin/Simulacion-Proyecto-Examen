@@ -60,6 +60,7 @@
 
         <form id="examen-form" action="/resultado" method="POST">
             <input type="hidden" name="tipo_examen" value="{{ tipo_examen }}">
+            <input type="hidden" name="todos_los_ids" value="{% for p in preguntas %}{{ p.id }}{% if not loop.last %},{% endif %}{% endfor %}">
             
             {% for pregunta in preguntas %}
             <div class="pregunta-bloque" id="bloque-{{ loop.index0 }}">
@@ -82,6 +83,7 @@
                 </div>
             </div>
             {% endfor %}
+            <button type="submit" id="submit-btn" style="display: none;"></button>
         </form>
 
         <div class="navegacion">
