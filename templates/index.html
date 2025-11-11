@@ -84,27 +84,40 @@
         <p>Intentos de Práctica Realizados: {{ intentos.practica }} / {{ limites.practica }}</p>
         <p>Intentos de Examen Final Realizados: {{ intentos.final }} / {{ limites.final }}</p>
         
-        <div>
-            <!-- Lógica para el botón de Práctica -->
-            {% set practica_aprobada = session.get('practica_aprobada', false) %}
-            {% if practica_aprobada %}
-                <a href="#" class="btn btn-success">Práctica Aprobada ✔️</a>
-            {% elif intentos.practica >= limites.practica %}
-                <a href="#" class="btn btn-disabled">Práctica (Límite alcanzado. Contactar Oficina 844 140 6339)</a>
-            {% else %}
-                <a href="/practica" class="btn btn-practica">Modo Práctica</a>
-            {% endif %}
-            
-            <!-- Lógica para el botón de Examen Final -->
-            {% set final_aprobado = session.get('final_aprobado', false) %}
-            {% if final_aprobado %}
-                <a href="#" class="btn btn-success">Examen Final Aprobado ✔️</a>
-            {% elif intentos.final >= limites.final %}
-                <a href="#" class="btn btn-disabled">Examen (Límite alcanzado. Contactar Oficina 844 140 6339)</a>
-            {% else %}
-                <a href="/examen" class="btn btn-examen">Examen Final</a>
-            {% endif %}
-        </div>
+<!-- EN templates/index.html -->
+<!-- ... (código existente hasta el div de los botones) ... -->
+<div>
+    <!-- Botón de Práctica -->
+    {% if session.get('practica_aprobada') %}
+        <a href="#" class="btn btn-success">Práctica Aprobada ✔️</a>
+    {% elif intentos.practica >= limites.practica %}
+        <a href="#" class="btn btn-disabled">Práctica (Límite alcanzado)</a>
+    {% else %}
+        <a href="/practica" class="btn btn-practica">Modo Práctica</a>
+    {% endif %}
+    
+    <!-- Botón de Examen Final -->
+    {% if session.get('final_aprobado') %}
+        <a href="#" class="btn btn-success">Examen Final Aprobado ✔️</a>
+    {% elif intentos.final >= limites.final %}
+        <a href="#" class="btn btn-disabled">Examen (Límite alcanzado)</a>
+    {% else %}
+        <a href="/examen" class="btn btn-examen">Examen Final</a>
+    {% endif %}
+</div>
+
+<!-- === NUEVA SECCIÓN PARA REVISIÓN === -->
+<div class="revision-links" style="margin-top: 20px;">
+    {% if ultimo_intento_practica_id %}
+        <a href="{{ url_for('revisar_intento', intento_id=ultimo_intento_practica_id) }}">Revisar Última Práctica</a>
+    {% endif %}
+    
+    {% if ultimo_intento_final_id %}
+        <span style="margin: 0 10px;">|</span>
+        <a href="{{ url_for('revisar_intento', intento_id=ultimo_intento_final_id) }}">Revisar Último Examen Final</a>
+    {% endif %}
+</div>
+
     </div>
 </body>
 </html>
