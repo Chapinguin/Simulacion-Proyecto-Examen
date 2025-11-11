@@ -58,31 +58,66 @@
         .btn-examen { background-color: #dc3545; }
         .btn-examen:hover { background-color: #c82333; }
         .btn-disabled { background-color: #6c757d; cursor: not-allowed; opacity: 0.7; }
+        .btn-success{ background-color: #28a745; cursor: default; 
+        }
     </style>
 </head>
+<!-- EN templates/index.html -->
 <body>
     <div class="main-container">
         <div class="user-info">
-            Bienvenido, <strong>{{ session.username }}</strong> |
-            <a href="/dashboard">Ver Dashboard</a> |
+            Bienvenido, <strong>{{ session.username }}</strong> | 
+            <a href="/dashboard">Ver Dashboard</a> | 
             <a href="/logout">Cerrar Sesión</a>
         </div>
         <h1>🚗 Simulador de Examen Teórico de Manejo 🏁</h1>
-        <p>Intentos de Práctica Realizados: <strong>{{ intentos.practica }} / 6</strong></p>
-        <p>Intentos de Examen Final Realizados: <strong>{{ intentos.final }} / 3</strong></p>
-        <div class="btn-container">
-            {% if intentos.practica < 6 %}
-                <a href="/practica" class="btn btn-practica">Modo Práctica</a>
-            {% else %}
-                <a href="#" class="btn btn-disabled">Práctica (Límite alcanzado)</a>
-            {% endif %}
 
-            {% if intentos.final < 3 %}
-                <a href="/examen" class="btn btn-examen">Examen Final</a>
-            {% else %}
-                <a href="#" class="btn btn-disabled">Examen (Límite alcanzado)</a>
+        <!-- Bloque para mostrar mensajes flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
             {% endif %}
-        </div>
+        {% endwith %}
+
+        <p>Intentos de Práctica Realizados: {{ intentos.practica }} / {{ limites.practica }}</p>
+        <p>Intentos de Examen Final Realizados: {{ intentos.final }} / {{ limites.final }}</p>
+        
+<!-- EN templates/index.html -->
+<!-- ... (código existente hasta el div de los botones) ... -->
+<div>
+    <!-- Botón de Práctica -->
+    {% if session.get('practica_aprobada') %}
+        <a href="#" class="btn btn-success">Práctica Aprobada ✔️</a>
+    {% elif intentos.practica >= limites.practica %}
+        <a href="#" class="btn btn-disabled">Práctica (Límite alcanzado)</a>
+    {% else %}
+        <a href="/practica" class="btn btn-practica">Modo Práctica</a>
+    {% endif %}
+    
+    <!-- Botón de Examen Final -->
+    {% if session.get('final_aprobado') %}
+        <a href="#" class="btn btn-success">Examen Final Aprobado ✔️</a>
+    {% elif intentos.final >= limites.final %}
+        <a href="#" class="btn btn-disabled">Examen (Límite alcanzado)</a>
+    {% else %}
+        <a href="/examen" class="btn btn-examen">Examen Final</a>
+    {% endif %}
+</div>
+
+<!-- === NUEVA SECCIÓN PARA REVISIÓN === -->
+<div class="revision-links" style="margin-top: 20px;">
+    {% if ultimo_intento_practica_id %}
+        <a href="{{ url_for('revisar_intento', intento_id=ultimo_intento_practica_id) }}">Revisar Última Práctica</a>
+    {% endif %}
+    
+    {% if ultimo_intento_final_id %}
+        <span style="margin: 0 10px;">|</span>
+        <a href="{{ url_for('revisar_intento', intento_id=ultimo_intento_final_id) }}">Revisar Último Examen Final</a>
+    {% endif %}
+</div>
+
     </div>
 </body>
 </html>

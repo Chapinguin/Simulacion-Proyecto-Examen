@@ -56,6 +56,7 @@ class Opcion(db.Model):
     texto_opcion = db.Column(db.String(200), nullable=False)
     es_correcta = db.Column(db.Boolean, default=False, nullable=False)
 
+
 class Intento(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
@@ -63,6 +64,15 @@ class Intento(db.Model):
     fecha = db.Column(db.DateTime, default=datetime.utcnow)
     puntaje_pct = db.Column(db.Float, nullable=False)
     aprobado = db.Column(db.Boolean, nullable=False)
+    respuestas = db.relationship('RespuestaUsuario', backref='intento', lazy=True, cascade="all, delete-orphan")
+
+
+class RespuestaUsuario(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    intento_id = db.Column(db.Integer, db.ForeignKey('intento.id'), nullable=False)
+    pregunta_id = db.Column(db.Integer, db.ForeignKey('pregunta.id'), nullable=False)
+    opcion_elegida_id = db.Column(db.Integer, db.ForeignKey('opcion.id'), nullable=True) # Nullable para no contestadas
+    es_correcta = db.Column(db.Boolean, nullable=False)
 
 # ==============================================================================
 # --- RUTAS DE AUTENTICACIÓN ---
@@ -137,25 +147,59 @@ def logout():
 # ==============================================================================
 # --- RUTAS PRINCIPALES DE LA APLICACIÓN ---
 # ==============================================================================
+# EN app.py
+# EN app.py (Reemplazar la función pagina_inicio)
+
 @app.route('/')
 def pagina_inicio():
     if 'user_id' not in session:
         return redirect(url_for('login'))
     
-    intentos_practica = Intento.query.filter_by(usuario_id=session['user_id'], tipo_examen='Práctica').count()
-    intentos_final = Intento.query.filter_by(usuario_id=session['user_id'], tipo_examen='Examen Final').count()
+    user_id = session['user_id']
+    
+    # Consultas para contar intentos
+    intentos_practica_count = Intento.query.filter_by(usuario_id=user_id, tipo_examen='Práctica').count()
+    intentos_final_count = Intento.query.filter_by(usuario_id=user_id, tipo_examen='Examen Final').count()
+    
+    # --- NUEVO: Buscar el ID del último intento para cada tipo ---
+    ultimo_intento_practica = Intento.query.filter_by(usuario_id=user_id, tipo_examen='Práctica').order_by(Intento.fecha.desc()).first()
+    ultimo_intento_final = Intento.query.filter_by(usuario_id=user_id, tipo_examen='Examen Final').order_by(Intento.fecha.desc()).first()
+
+    practica_aprobada = Intento.query.filter_by(usuario_id=user_id, tipo_examen='Práctica', aprobado=True).first() is not None
+    final_aprobado = Intento.query.filter_by(usuario_id=user_id, tipo_examen='Examen Final', aprobado=True).first() is not None
+    
+    session['practica_aprobada'] = practica_aprobada
+    session['final_aprobado'] = final_aprobado
     
     return render_template('index.html', 
-                        intentos={'practica': intentos_practica, 'final': intentos_final},
-                        limites={'practica': LIMITE_INTENTOS_PRACTICA, 'final': LIMITE_INTENTOS_FINAL})
+                        intentos={'practica': intentos_practica_count, 'final': intentos_final_count},
+                        limites={'practica': LIMITE_INTENTOS_PRACTICA, 'final': LIMITE_INTENTOS_FINAL},
+                        ultimo_intento_practica_id=ultimo_intento_practica.id if ultimo_intento_practica else None,
+                        ultimo_intento_final_id=ultimo_intento_final.id if ultimo_intento_final else None)
 
 @app.route('/practica')
 def modo_practica():
     if 'user_id' not in session: return redirect(url_for('login'))
     
-    intentos_usuario = Intento.query.filter_by(usuario_id=session['user_id'], tipo_examen='Práctica').count()
+    user_id = session['user_id']
+    
+    # --- NUEVA COMPROBACIÓN 1: Verificar si ya aprobó un examen de práctica ---
+    intento_aprobado = Intento.query.filter_by(
+        usuario_id=user_id, 
+        tipo_examen='Práctica', 
+        aprobado=True
+    ).first()
+    
+    if intento_aprobado:
+        flash("¡Felicidades! Ya has aprobado el examen de práctica.", "success")
+        return redirect(url_for('pagina_inicio'))
+    # --- FIN DE LA COMPROBACIÓN 1 ---
+
+    # Comprobación del límite de intentos (se mantiene igual)
+    intentos_usuario = Intento.query.filter_by(usuario_id=user_id, tipo_examen='Práctica').count()
     if intentos_usuario >= LIMITE_INTENTOS_PRACTICA:
-        return f"Has alcanzado el límite de {LIMITE_INTENTOS_PRACTICA} intentos de práctica. <a href='/'>Volver</a>"
+        flash(f"Has alcanzado el límite de {LIMITE_INTENTOS_PRACTICA} intentos de práctica.", "warning")
+        return redirect(url_for('pagina_inicio'))
 
     preguntas_seleccionadas = db.session.query(Pregunta).order_by(func.random()).limit(NUM_PREGUNTAS_PRACTICA).all()
     
@@ -164,13 +208,30 @@ def modo_practica():
                         tipo_examen="Práctica", 
                         puntos_por_pregunta=PUNTOS_PRACTICA)
 
+
 @app.route('/examen')
 def modo_examen():
     if 'user_id' not in session: return redirect(url_for('login'))
 
-    intentos_usuario = Intento.query.filter_by(usuario_id=session['user_id'], tipo_examen='Examen Final').count()
+    user_id = session['user_id']
+
+    # --- NUEVA COMPROBACIÓN 2: Verificar si ya aprobó un examen final ---
+    intento_aprobado = Intento.query.filter_by(
+        usuario_id=user_id, 
+        tipo_examen='Examen Final', 
+        aprobado=True
+    ).first()
+
+    if intento_aprobado:
+        flash("¡Felicidades! Ya has aprobado el examen final y estás listo para tu prueba práctica.", "success")
+        return redirect(url_for('pagina_inicio'))
+    # --- FIN DE LA COMPROBACIÓN 2 ---
+
+    # Comprobación del límite de intentos (se mantiene igual)
+    intentos_usuario = Intento.query.filter_by(usuario_id=user_id, tipo_examen='Examen Final').count()
     if intentos_usuario >= LIMITE_INTENTOS_FINAL:
-        return f"Has alcanzado el límite de {LIMITE_INTENTOS_FINAL} intentos para el examen final. <a href='/'>Volver</a>"
+        flash(f"Has alcanzado el límite de {LIMITE_INTENTOS_FINAL} intentos para el examen final.", "warning")
+        return redirect(url_for('pagina_inicio'))
         
     preguntas_seleccionadas = db.session.query(Pregunta).order_by(func.random()).limit(NUM_PREGUNTAS_FINAL).all()
     
@@ -180,49 +241,44 @@ def modo_examen():
                         puntos_por_pregunta=PUNTOS_FINAL)
 
 # EN app.py (Reemplazar la función procesar_resultado)
+
 @app.route('/resultado', methods=['POST'])
 def procesar_resultado():
-    if 'user_id' not in session: 
-        return redirect(url_for('login'))
+    if 'user_id' not in session: return redirect(url_for('login'))
 
-    respuestas_usuario = request.form
+    respuestas_usuario_form = request.form
     tipo_examen = request.form.get('tipo_examen')
     user_id = session['user_id']
 
-    # --- INICIO DE LA NUEVA LÓGICA DE CALIFICACIÓN ---
-    
-    # Obtenemos la lista completa de IDs de las preguntas del examen
     ids_str = request.form.get('todos_los_ids', '')
     preguntas_ids_en_examen = [int(id_str) for id_str in ids_str.split(',') if id_str.strip()]
     
-    total_preguntas_en_examen = len(preguntas_ids_en_examen)
+    preguntas_del_examen = db.session.query(Pregunta).filter(Pregunta.id.in_(preguntas_ids_en_examen)).all()
+    
+    total_preguntas_en_examen = len(preguntas_del_examen)
     respuestas_correctas = 0
+    
+    # --- LÓGICA DE CALIFICACIÓN Y PREPARACIÓN DE DATOS ---
+    respuestas_para_guardar = []
     resultados_detallados = []
 
-    # Iteramos directamente sobre los IDs de las preguntas que estaban en el examen
-    for pregunta_id in preguntas_ids_en_examen:
-        # Buscamos la pregunta en la base de datos
-        pregunta = db.session.query(Pregunta).get(pregunta_id)
-        if not pregunta:
-            continue # Si por alguna razón no se encuentra, la saltamos
+    for pregunta in preguntas_del_examen:
+        opcion_elegida_id_str = respuestas_usuario_form.get(f"pregunta-{pregunta.id}")
+        opcion_elegida_id = int(opcion_elegida_id_str) if opcion_elegida_id_str else None
+        
+        opcion_correcta_obj = next((op for op in pregunta.opciones if op.es_correcta), None)
+        es_correcta = (opcion_elegida_id == opcion_correcta_obj.id) if opcion_correcta_obj and opcion_elegida_id else False
 
-        # Obtenemos la respuesta del usuario para esta pregunta
-        pregunta_id_form = f"pregunta-{pregunta_id}"
-        opcion_elegida_id_str = respuestas_usuario.get(pregunta_id_form) # Puede ser None
+        if es_correcta:
+            respuestas_correctas += 1
+
+        respuestas_para_guardar.append({
+            'pregunta_id': pregunta.id,
+            'opcion_elegida_id': opcion_elegida_id,
+            'es_correcta': es_correcta
+        })
         
-        # Buscamos la opción correcta de la pregunta
-        opcion_correcta_obj = db.session.query(Opcion).filter_by(pregunta_id=pregunta_id, es_correcta=True).first()
-        
-        es_correcta = False
-        opcion_elegida_obj = None
-        
-        if opcion_elegida_id_str:
-            opcion_elegida_obj = db.session.query(Opcion).get(int(opcion_elegida_id_str))
-            if opcion_elegida_obj and opcion_elegida_obj.es_correcta:
-                respuestas_correctas += 1
-                es_correcta = True
-        
-        # Preparamos los datos para la plantilla de resultados
+        opcion_elegida_obj = next((op for op in pregunta.opciones if op.id == opcion_elegida_id), None)
         resultados_detallados.append({
             'pregunta': pregunta.texto_pregunta,
             'opciones': {str(op.id): op.texto_opcion for op in pregunta.opciones},
@@ -232,46 +288,91 @@ def procesar_resultado():
             'explicacion': pregunta.explicacion
         })
 
-    # --- Lógica de Calificación (basada en los parámetros globales) ---
-    if tipo_examen == "Práctica":
-        puntos_por_reactivo = PUNTOS_PRACTICA
-        puntaje_maximo = total_preguntas_en_examen * PUNTOS_PRACTICA
-    elif tipo_examen == "Examen Final":
-        puntos_por_reactivo = PUNTOS_FINAL
-        puntaje_maximo = total_preguntas_en_examen * PUNTOS_FINAL
-    else:
-        return "Tipo de examen no reconocido", 400
-
+    # --- LÓGICA DE PUNTAJE Y GUARDADO EN BD ---
+    puntos_por_reactivo = PUNTOS_PRACTICA if tipo_examen == "Práctica" else PUNTOS_FINAL
     puntaje = respuestas_correctas * puntos_por_reactivo
+    puntaje_maximo = total_preguntas_en_examen * puntos_por_reactivo
     puntaje_porcentual = (puntaje / puntaje_maximo) * 100 if puntaje_maximo > 0 else 0
     aprobado = puntaje_porcentual >= PORCENTAJE_APROBACION
     
-    # --- Guardar el Intento en la Base de Datos ---
-    nuevo_intento = Intento(
-        usuario_id=user_id,
-        tipo_examen=tipo_examen,
-        puntaje_pct=puntaje_porcentual,
-        aprobado=aprobado
-    )
+    # Crear el intento principal
+    nuevo_intento = Intento(usuario_id=user_id, tipo_examen=tipo_examen, puntaje_pct=puntaje_porcentual, aprobado=aprobado)
     db.session.add(nuevo_intento)
-    db.session.commit()
-    
-    flash(f"Tu {tipo_examen} ha sido calificado.", "info")
-    
-    return render_template('resultado.html', 
-                        puntaje=puntaje,
-                        puntaje_maximo=puntaje_maximo,
-                        puntaje_porcentual=puntaje_porcentual,
-                        aprobado=aprobado,
-                        resultados=resultados_detallados,
-                        tipo_examen=tipo_examen,
-                        respuestas_correctas=respuestas_correctas,
-                        total_preguntas=total_preguntas_en_examen,
-                        puntos_reactivo=puntos_por_reactivo,
-                        porcentaje_aprobacion=PORCENTAJE_APROBACION)
+    db.session.flush() # Para obtener el ID del nuevo intento antes de hacer commit
 
+    # Guardar cada respuesta asociada a este nuevo intento
+    for r in respuestas_para_guardar:
+        nueva_respuesta = RespuestaUsuario(
+            intento_id=nuevo_intento.id,
+            pregunta_id=r['pregunta_id'],
+            opcion_elegida_id=r['opcion_elegida_id'],
+            es_correcta=r['es_correcta']
+        )
+        db.session.add(nueva_respuesta)
 
-# EN app.py (Reemplazar la función dashboard)
+    db.session.commit() # Guardar todo en la base de datos
+    
+    flash("Tu examen ha sido calificado y guardado.", "info")
+    
+    return render_template('resultado.html', # ... (el resto de los argumentos se mantiene igual)
+                        puntaje=puntaje, puntaje_maximo=puntaje_maximo,
+                        puntaje_porcentual=puntaje_porcentual, aprobado=aprobado,
+                        resultados=resultados_detallados, tipo_examen=tipo_examen,
+                        respuestas_correctas=respuestas_correctas, total_preguntas=total_preguntas_en_examen,
+                        puntos_reactivo=puntos_por_reactivo, porcentaje_aprobacion=PORCENTAJE_APROBACION)
+    
+    
+# EN app.py (añadir esta nueva ruta)
+
+@app.route('/revisar/<int:intento_id>')
+def revisar_intento(intento_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    # Buscar el intento en la base de datos
+    intento = Intento.query.get_or_404(intento_id)
+
+    # Medida de seguridad: asegurarse de que el usuario solo pueda ver sus propios intentos
+    if intento.usuario_id != session['user_id']:
+        flash("No tienes permiso para ver este resultado.", "danger")
+        return redirect(url_for('pagina_inicio'))
+
+    # Reconstruir los datos para la plantilla resultado.html
+    respuestas_guardadas = RespuestaUsuario.query.filter_by(intento_id=intento.id).all()
+    
+    resultados_detallados = []
+    respuestas_correctas = 0
+    
+    for respuesta in respuestas_guardadas:
+        pregunta = Pregunta.query.get(respuesta.pregunta_id)
+        opcion_correcta_obj = next((op for op in pregunta.opciones if op.es_correcta), None)
+        opcion_elegida_obj = Opcion.query.get(respuesta.opcion_elegida_id) if respuesta.opcion_elegida_id else None
+        
+        if respuesta.es_correcta:
+            respuestas_correctas += 1
+
+        resultados_detallados.append({
+            'pregunta': pregunta.texto_pregunta,
+            'opciones': {str(op.id): op.texto_opcion for op in pregunta.opciones},
+            'respuesta_enviada_texto': opcion_elegida_obj.texto_opcion if opcion_elegida_obj else "No contestada",
+            'respuesta_correcta_texto': opcion_correcta_obj.texto_opcion,
+            'es_correcta': respuesta.es_correcta,
+            'explicacion': pregunta.explicacion
+        })
+
+    # Recalcular puntaje para mostrar
+    tipo_examen = intento.tipo_examen
+    total_preguntas = len(resultados_detallados)
+    puntos_por_reactivo = PUNTOS_PRACTICA if tipo_examen == "Práctica" else PUNTOS_FINAL
+    puntaje = respuestas_correctas * puntos_por_reactivo
+    puntaje_maximo = total_preguntas * puntos_por_reactivo
+
+    return render_template('resultado.html',
+                        puntaje=puntaje, puntaje_maximo=puntaje_maximo,
+                        puntaje_porcentual=intento.puntaje_pct, aprobado=intento.aprobado,
+                        resultados=resultados_detallados, tipo_examen=tipo_examen,
+                        respuestas_correctas=respuestas_correctas, total_preguntas=total_preguntas,
+                        puntos_reactivo=puntos_por_reactivo, porcentaje_aprobacion=PORCENTAJE_APROBACION)
 
 @app.route('/dashboard')
 def dashboard():
