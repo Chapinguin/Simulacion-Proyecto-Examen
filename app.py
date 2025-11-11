@@ -137,25 +137,55 @@ def logout():
 # ==============================================================================
 # --- RUTAS PRINCIPALES DE LA APLICACIÓN ---
 # ==============================================================================
+# EN app.py
+
 @app.route('/')
 def pagina_inicio():
     if 'user_id' not in session:
         return redirect(url_for('login'))
     
-    intentos_practica = Intento.query.filter_by(usuario_id=session['user_id'], tipo_examen='Práctica').count()
-    intentos_final = Intento.query.filter_by(usuario_id=session['user_id'], tipo_examen='Examen Final').count()
+    user_id = session['user_id']
+    
+    # Consultamos el número de intentos
+    intentos_practica = Intento.query.filter_by(usuario_id=user_id, tipo_examen='Práctica').count()
+    intentos_final = Intento.query.filter_by(usuario_id=user_id, tipo_examen='Examen Final').count()
+    
+    # --- NUEVO: Consultamos si ya existe un intento aprobado ---
+    practica_aprobada = Intento.query.filter_by(usuario_id=user_id, tipo_examen='Práctica', aprobado=True).first() is not None
+    final_aprobado = Intento.query.filter_by(usuario_id=user_id, tipo_examen='Examen Final', aprobado=True).first() is not None
+    
+    # Guardamos este estado en la sesión para que sea fácil de acceder
+    session['practica_aprobada'] = practica_aprobada
+    session['final_aprobado'] = final_aprobado
     
     return render_template('index.html', 
                         intentos={'practica': intentos_practica, 'final': intentos_final},
                         limites={'practica': LIMITE_INTENTOS_PRACTICA, 'final': LIMITE_INTENTOS_FINAL})
+# EN app.py
 
 @app.route('/practica')
 def modo_practica():
     if 'user_id' not in session: return redirect(url_for('login'))
     
-    intentos_usuario = Intento.query.filter_by(usuario_id=session['user_id'], tipo_examen='Práctica').count()
+    user_id = session['user_id']
+    
+    # --- NUEVA COMPROBACIÓN 1: Verificar si ya aprobó un examen de práctica ---
+    intento_aprobado = Intento.query.filter_by(
+        usuario_id=user_id, 
+        tipo_examen='Práctica', 
+        aprobado=True
+    ).first()
+    
+    if intento_aprobado:
+        flash("¡Felicidades! Ya has aprobado el examen de práctica.", "success")
+        return redirect(url_for('pagina_inicio'))
+    # --- FIN DE LA COMPROBACIÓN 1 ---
+
+    # Comprobación del límite de intentos (se mantiene igual)
+    intentos_usuario = Intento.query.filter_by(usuario_id=user_id, tipo_examen='Práctica').count()
     if intentos_usuario >= LIMITE_INTENTOS_PRACTICA:
-        return f"Has alcanzado el límite de {LIMITE_INTENTOS_PRACTICA} intentos de práctica. <a href='/'>Volver</a>"
+        flash(f"Has alcanzado el límite de {LIMITE_INTENTOS_PRACTICA} intentos de práctica.", "warning")
+        return redirect(url_for('pagina_inicio'))
 
     preguntas_seleccionadas = db.session.query(Pregunta).order_by(func.random()).limit(NUM_PREGUNTAS_PRACTICA).all()
     
@@ -164,13 +194,30 @@ def modo_practica():
                         tipo_examen="Práctica", 
                         puntos_por_pregunta=PUNTOS_PRACTICA)
 
+
 @app.route('/examen')
 def modo_examen():
     if 'user_id' not in session: return redirect(url_for('login'))
 
-    intentos_usuario = Intento.query.filter_by(usuario_id=session['user_id'], tipo_examen='Examen Final').count()
+    user_id = session['user_id']
+
+    # --- NUEVA COMPROBACIÓN 2: Verificar si ya aprobó un examen final ---
+    intento_aprobado = Intento.query.filter_by(
+        usuario_id=user_id, 
+        tipo_examen='Examen Final', 
+        aprobado=True
+    ).first()
+
+    if intento_aprobado:
+        flash("¡Felicidades! Ya has aprobado el examen final y estás listo para tu prueba práctica.", "success")
+        return redirect(url_for('pagina_inicio'))
+    # --- FIN DE LA COMPROBACIÓN 2 ---
+
+    # Comprobación del límite de intentos (se mantiene igual)
+    intentos_usuario = Intento.query.filter_by(usuario_id=user_id, tipo_examen='Examen Final').count()
     if intentos_usuario >= LIMITE_INTENTOS_FINAL:
-        return f"Has alcanzado el límite de {LIMITE_INTENTOS_FINAL} intentos para el examen final. <a href='/'>Volver</a>"
+        flash(f"Has alcanzado el límite de {LIMITE_INTENTOS_FINAL} intentos para el examen final.", "warning")
+        return redirect(url_for('pagina_inicio'))
         
     preguntas_seleccionadas = db.session.query(Pregunta).order_by(func.random()).limit(NUM_PREGUNTAS_FINAL).all()
     
