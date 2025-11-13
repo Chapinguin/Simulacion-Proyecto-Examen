@@ -91,7 +91,7 @@
     {% if session.get('practica_aprobada') %}
         <a href="#" class="btn btn-success">Práctica Aprobada ✔️</a>
     {% elif intentos.practica >= limites.practica %}
-        <a href="#" class="btn btn-disabled">Práctica (Límite alcanzado)</a>
+        <a href="#" class="btn btn-disabled">Práctica (Límite alcanzado Contactar Oficina 844 140 6339)</a>
     {% else %}
         <a href="/practica" class="btn btn-practica">Modo Práctica</a>
     {% endif %}
@@ -100,7 +100,7 @@
     {% if session.get('final_aprobado') %}
         <a href="#" class="btn btn-success">Examen Final Aprobado ✔️</a>
     {% elif intentos.final >= limites.final %}
-        <a href="#" class="btn btn-disabled">Examen (Límite alcanzado)</a>
+        <a href="#" class="btn btn-disabled">Examen (Límite alcanzado Contactar Oficina 844 140 6339)</a>
     {% else %}
         <a href="/examen" class="btn btn-examen">Examen Final</a>
     {% endif %}
